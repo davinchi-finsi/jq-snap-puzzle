@@ -39,9 +39,14 @@ export class SnapPuzzleOptions{
     classes?: {
         /**
          * Root element
-         * @default `c-snap-puzzle`
+         * @default `c-snap-puzzle__image`
          */
         root?: string;
+        /**
+         * Class for the wrapper and the root element for when the puzzle is completed
+         * @default `c-snap-puzzle--completed`
+         */
+        completed?:string;
         /**
          * Class for the disabled state
          * @default `c-snap-puzzle--disabled`
@@ -49,7 +54,7 @@ export class SnapPuzzleOptions{
         disabled?: string;
         /**
          * Class for the wrapper
-         * @default `c-snap-puzzle__wrapper`
+         * @default `c-snap-puzzle`
          */
         wrapper?:string;
         /**
@@ -87,6 +92,11 @@ export class SnapPuzzleOptions{
          * @default `c-snap-puzzle__slot`
          */
         slot?:string;
+        /**
+         * Class for the slots when have a piece placed
+         * @default `c-snap-puzzle__slot--has-piece`
+         */
+        slotHasPiece?:string;
         /**
          * Class for the slot when the incorrect piece is hover or has been dropped
          * @default `c-snap-puzzle__slot--incorrect`

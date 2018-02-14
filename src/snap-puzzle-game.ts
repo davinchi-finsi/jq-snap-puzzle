@@ -3,6 +3,10 @@
  *//** */
 import {SnapPuzzleOptions} from "./snap-puzzle-options";
 import {SnapPuzzlePiece} from "./snap-puzzle-piece";
+import {
+    SnapPuzzleEvents,
+    SnapPuzzlePieceDropEvent
+} from "./snap-puzzle-events";
 /**
  * Puzzle game
  */
@@ -19,25 +23,70 @@ export class SnapPuzzleGame{
      * Disabled state
      */
     protected disabled: boolean;
+    /**
+     * Width of the image
+     */
     protected imageWidth:number;
+    /**
+     * Height of the image
+     */
     protected imageHeight:number;
+    /**
+     * Width for each piece
+     */
     protected pieceWidth:number;
+    /**
+     * Height for each piece
+     */
     protected pieceHeight:number;
+    /**
+     * Source of the image
+     */
     protected src:string;
+    /**
+     * Wrapper element for the widget.
+     */
     protected wrapperEl:JQuery;
+    /**
+     * All the SnapPuzzlePieces that conforms the puzzle
+     */
     protected pieces:SnapPuzzlePiece[];
+    /**
+     * All the SnapPuzzlePieces as matrix
+     */
     protected piecesMatrix:SnapPuzzlePiece[][];
+    /**
+     * Jquery object with all the slots
+     */
     protected slotsEls:JQuery;
+    /**
+     * Jquery object with all the pieces
+     */
     protected piecesEls:JQuery;
+    /**
+     * Jquery element that will contain all the slots
+     */
     protected slotsContainerEl:JQuery;
+    /**
+     * Jquery element that will contain all the pieces
+     */
     protected piecesContainerEl:JQuery;
+    /**
+     * Control of the resize event
+     */
     protected resizeTimeout:any;
+    /**
+     * Number of pieces completed
+     */
+    protected completed:number;
     /**
      * Destroy the component
      */
     destroy(){
-        this.element.removeClass([this.options.classes.disabled,this.options.classes.root]);
+        this.element.removeClass([this.options.classes.disabled,this.options.classes.root,this.options.classes.completed]);
         this.element.off("."+this.options.namespace);
+        this.element.insertAfter(this.wrapperEl);
+        this.wrapperEl.remove();
         //@ts-ignore
         this._super();
     }
@@ -48,6 +97,11 @@ export class SnapPuzzleGame{
         //@ts-ignore
         this._super();
         this.element.addClass(this.options.classes.disabled);
+        this.wrapperEl.addClass(this.options.classes.disabled);
+        for(let piece of this.pieces){
+            //@ts-ignore
+            piece.disable();
+        }
     }
 
     /**
@@ -56,6 +110,12 @@ export class SnapPuzzleGame{
     enable() {
         //@ts-ignore
         this._super();
+        this.element.removeClass(this.options.classes.disabled);
+        this.wrapperEl.removeClass(this.options.classes.disabled);
+        for(let piece of this.pieces){
+            //@ts-ignore
+            piece.enable();
+        }
     }
 
     /**
@@ -68,9 +128,23 @@ export class SnapPuzzleGame{
             piece.refresh();
         }
     }
+
+    /**
+     * Reset the puzzle
+     */
+    reset(){
+        this.completed = 0;
+        this.wrapperEl.removeClass(this.options.classes.completed);
+        this.element.removeClass(this.options.classes.completed);
+        let pieces = this.pieces;
+        for(let piece of pieces){
+            piece.reset();
+        }
+        this.element.trigger(SnapPuzzleEvents.reset);
+    }
     /**
      * JQuery ui function to get the default options
-     * @private
+     * @protected
      */
     protected _getCreateOptions() {
         let options: SnapPuzzleOptions = {
@@ -78,7 +152,9 @@ export class SnapPuzzleGame{
             rows:0,
             namespace: "jq-snap-puzzle",
             classes: {//css classes for elements
-                root: "c-snap-puzzle",
+                root: "c-snap-puzzle__image",
+                wrapper:"c-snap-puzzle",
+                completed:"c-snap-puzzle--completed",
                 disabled: "c-snap-puzzle--disabled",
                 piecesContainer:"c-snap-puzzle__pieces-container",
                 slotsContainer:"c-snap-puzzle__slots-container",
@@ -87,6 +163,7 @@ export class SnapPuzzleGame{
                 pieceCorrect:"c-snap-puzzle__piece--correct",
                 pieceDisabled:"c-snap-puzzle__piece--disabled",
                 slot:"c-snap-puzzle__slot",
+                slotHasPiece:"c-snap-puzzle__slot--has-piece",
                 slotIncorrect:"c-snap-puzzle__slot--incorrect",
                 slotCorrect:"c-snap-puzzle__slot--correct",
                 slotDisabled:"c-snap-puzzle__slot--disabled"
@@ -102,7 +179,7 @@ export class SnapPuzzleGame{
     /**
      * Creates the container for pieces
      * @returns {JQuery}
-     * @private
+     * @protected
      */
     protected _createPiecesContainer():JQuery{
         let result: JQuery;
@@ -117,7 +194,7 @@ export class SnapPuzzleGame{
     /**
      * Creates the container for slots
      * @returns {JQuery}
-     * @private
+     * @protected
      */
     protected _createSlotsContainer():JQuery{
         let result: JQuery;
@@ -132,7 +209,7 @@ export class SnapPuzzleGame{
     /**
      * Creates the wrapper for the widget
      * @returns {JQuery}
-     * @private
+     * @protected
      */
     protected _createWrapper():JQuery{
         let result: JQuery;
@@ -149,7 +226,7 @@ export class SnapPuzzleGame{
      * @param x
      * @param y
      * @returns {JQuery}
-     * @private
+     * @protected
      */
     protected _createPiece(x,y):JQuery{
         let result: JQuery;
@@ -166,7 +243,7 @@ export class SnapPuzzleGame{
      * @param x
      * @param y
      * @returns {JQuery}
-     * @private
+     * @protected
      */
     protected _createSlot(x,y):JQuery{
         let result: JQuery;
@@ -183,7 +260,7 @@ export class SnapPuzzleGame{
      * @param x
      * @param y
      * @returns {SnapPuzzlePiece}
-     * @private
+     * @protected
      */
     protected _constructPiece(x,y):SnapPuzzlePiece{
         let pieceEl = this._createPiece(x,y),
@@ -200,14 +277,15 @@ export class SnapPuzzleGame{
 
     /**
      * Creation of the widget
-     * @private
+     * @protected
      */
     protected _create(){
         if(this.element.is("img")){
             let src = this.element.attr("src");
             this.src = src;
+            this.element.addClass(this.options.classes.root);
             this.wrapperEl = this._createWrapper();
-            this.wrapperEl.addClass(this.options.classes.root);
+            this.wrapperEl.addClass(this.options.classes.wrapper);
             this.piecesContainerEl = this.options.appendPiecesTo != undefined ? $(this.options.appendPiecesTo) : this._createPiecesContainer();
             this.slotsContainerEl = this._createSlotsContainer();
             if(this.options.appendPiecesTo == undefined){
@@ -218,11 +296,13 @@ export class SnapPuzzleGame{
             this.slotsContainerEl.append(this.element);
             this.pieces = [];
             this.piecesMatrix = [];
+            this.completed = 0;
             if((this.options.width && this.options.height) || (this.element.width() != Infinity && this.element.height() != Infinity)){
                 this._onImageLoaded();
             }else{
                 this.element.one("load",this._onImageLoaded.bind(this));
             }
+            this.element.on(SnapPuzzleEvents.pieceDrop,this._onPieceDrop.bind(this));
         }else{
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
         }
@@ -239,7 +319,12 @@ export class SnapPuzzleGame{
      * @param e
      * @param ui
      */
-    protected onDrop(e,ui){
+    protected _onDrop(e,ui){
+        let snapPiece:SnapPuzzlePiece = ui.draggable.data(SnapPuzzlePiece.DATA_KEY);
+        if(snapPiece && snapPiece.pieceDroppedInto){
+            snapPiece.pieceDroppedInto.pieceDropped = null;
+            snapPiece.pieceDroppedInto = null;
+        }
         ui.draggable.removeClass([this.options.classes.pieceIncorrect,this.options.classes.pieceCorrect]);
     }
     protected _resolveDimensions(){
@@ -250,7 +335,7 @@ export class SnapPuzzleGame{
     }
     /**
      * Invoked when the image has been loaded
-     * @private
+     * @protected
      */
     protected _onImageLoaded(){
         //wait for image to load
@@ -283,17 +368,45 @@ export class SnapPuzzleGame{
         this.piecesContainerEl.droppable({
             //@ts-ignore
             accept: "."+this.options.classes.piece,
-            drop:this.onDrop.bind(this)
+            drop:this._onDrop.bind(this)
         });
-        this._throotleResize();
+        this._throttleResize();
+    }
+
+    /**
+     * Invoked when a piece is placed.
+     * If the piece is correct, increment the completed counter.
+     * When all the pieces are placed correctly, triggers the [[SnapPuzzleEvents.end]] event
+     * @param e
+     * @param {SnapPuzzlePieceDropEvent} data
+     * @protected
+     */
+    protected _onPieceDrop(e,data:SnapPuzzlePieceDropEvent){
+        if(data.isCorrect){
+            this.completed++;
+        }
+        if(this.completed == this.pieces.length){
+            this._complete();
+        }
+    }
+
+    /**
+     * Mark the widget as completed
+     * Triggers the [[SnapPuzzleEvents.end]] event
+     * @private
+     */
+    protected _complete(){
+        this.wrapperEl.addClass(this.options.classes.completed);
+        this.element.addClass(this.options.classes.completed);
+        this.element.trigger(SnapPuzzleEvents.completed,this);
     }
     protected _onNativeResize(){
         if(this.resizeTimeout){
             clearTimeout(this.resizeTimeout);
         }
-        setTimeout(this._onResize.bind(this),100);
+        this.resizeTimeout = setTimeout(this._onResize.bind(this),200);
     }
-    protected _throotleResize () {
+    protected _throttleResize () {
         $(window).on("resize", this._onNativeResize.bind(this));
     };
 }
