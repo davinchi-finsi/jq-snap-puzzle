@@ -112,6 +112,16 @@ export class SnapPuzzleOptions{
          * @default `c-snap-puzzle__slot--disabled`
          */
         slotDisabled?:string;
+        /**
+         * Class for the wrapper when the feedbackOnHover option is true
+         * @default `c-snap-puzzle--feedback-on-hover`
+         */
+        feedbackOnHover?:string;
+        /**
+         * Class for the wrapper when the backgroundInSlots option is true
+         * @default `c-snap-puzzle--slots-background`
+         */
+        backgroundInSlots?:string;
     };
     /**
      * If true, the pieces only could be dropped in the correct slots.

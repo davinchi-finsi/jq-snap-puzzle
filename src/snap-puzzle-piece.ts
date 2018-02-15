@@ -76,6 +76,7 @@ export class SnapPuzzlePiece{
         }
         if(params.slotEl != undefined){
             this.slotEl = params.slotEl;
+            this.slotNativeEl = this.slotEl.get(0);
         }
         if(params.x != undefined){
             this.x = params.x;
@@ -173,7 +174,7 @@ export class SnapPuzzlePiece{
         //a piece could not be dropped in a slot that already has a piece
         //an incorrect piece could not be dropped in a slot if the option "onlyDropOnValid" is true
         //@ts-ignore
-        if ((this.pieceDropped == undefined || this.pieceDropped.pieceNativeEl == itemNativeEl) && (this.puzzle.options.onlyDropOnValid == false || itemNativeEl != this.pieceNativeEl)) {
+        if ((this.pieceDropped == undefined || this.pieceDropped.pieceNativeEl == itemNativeEl) && (this.puzzle.options.onlyDropOnValid == false || itemNativeEl == this.pieceNativeEl)) {
             const piece:SnapPuzzlePiece = item.data(SnapPuzzlePiece.DATA_KEY);
             //reset the pieceDropped of the previous slot
             if(piece.pieceDroppedInto) {

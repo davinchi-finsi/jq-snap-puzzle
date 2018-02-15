@@ -166,7 +166,9 @@ export class SnapPuzzleGame{
                 slotHasPiece:"c-snap-puzzle__slot--has-piece",
                 slotIncorrect:"c-snap-puzzle__slot--incorrect",
                 slotCorrect:"c-snap-puzzle__slot--correct",
-                slotDisabled:"c-snap-puzzle__slot--disabled"
+                slotDisabled:"c-snap-puzzle__slot--disabled",
+                feedbackOnHover:"c-snap-puzzle--feedback-on-hover",
+                backgroundInSlots:"c-snap-puzzle--slots-background"
             },
             onlyDropOnValid:false,
             feedbackOnHover:true,
@@ -286,6 +288,12 @@ export class SnapPuzzleGame{
             this.element.addClass(this.options.classes.root);
             this.wrapperEl = this._createWrapper();
             this.wrapperEl.addClass(this.options.classes.wrapper);
+            if(this.options.feedbackOnHover){
+                this.wrapperEl.addClass(this.options.classes.feedbackOnHover);
+            }
+            if(this.options.backgroundInSlots){
+                this.wrapperEl.addClass(this.options.classes.backgroundInSlots);
+            }
             this.piecesContainerEl = this.options.appendPiecesTo != undefined ? $(this.options.appendPiecesTo) : this._createPiecesContainer();
             this.slotsContainerEl = this._createSlotsContainer();
             if(this.options.appendPiecesTo == undefined){
@@ -297,7 +305,8 @@ export class SnapPuzzleGame{
             this.pieces = [];
             this.piecesMatrix = [];
             this.completed = 0;
-            if((this.options.width && this.options.height) || (this.element.width() != Infinity && this.element.height() != Infinity)){
+            this._resolveDimensions();
+            if((this.imageWidth != Infinity && this.imageWidth != 0) && (this.imageHeight != Infinity && this.imageHeight != 0)){
                 this._onImageLoaded();
             }else{
                 this.element.one("load",this._onImageLoaded.bind(this));
@@ -328,10 +337,10 @@ export class SnapPuzzleGame{
         ui.draggable.removeClass([this.options.classes.pieceIncorrect,this.options.classes.pieceCorrect]);
     }
     protected _resolveDimensions(){
-        this.imageWidth = (this.options.width || this.element.width());
-        this.imageHeight = (this.options.height || this.element.height());
-        this.pieceWidth = this.imageWidth/this.options.rows;
-        this.pieceHeight = this.imageHeight/this.options.columns;
+        this.imageWidth = (this.element.width() || this.options.width || 0);
+        this.imageHeight = (this.element.height() || this.options.height || 0);
+        this.pieceWidth = this.imageWidth/this.options.columns;
+        this.pieceHeight = this.imageHeight/this.options.rows;
     }
     /**
      * Invoked when the image has been loaded
