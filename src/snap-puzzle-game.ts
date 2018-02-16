@@ -241,6 +241,7 @@ export class SnapPuzzleGame{
         }else if(refresh){
             //@ts-ignore
             this._super(options);
+            this._applyClassModifiers();
             this.refresh();
         }
     }
@@ -344,6 +345,22 @@ export class SnapPuzzleGame{
     }
 
     /**
+     * Apply the css classes for options
+     * @protected
+     */
+    protected _applyClassModifiers(){
+        if(this.options.feedbackOnHover){
+            this.wrapperEl.addClass(this.options.classes.feedbackOnHover);
+        }else{
+            this.wrapperEl.removeClass(this.options.classes.feedbackOnHover);
+        }
+        if(this.options.backgroundInSlots){
+            this.wrapperEl.addClass(this.options.classes.backgroundInSlots);
+        }else{
+            this.wrapperEl.removeClass(this.options.classes.backgroundInSlots);
+        }
+    }
+    /**
      * Creation of the widget
      * @protected
      */
@@ -354,12 +371,7 @@ export class SnapPuzzleGame{
             this.element.addClass(this.options.classes.root);
             this.wrapperEl = this._createWrapper();
             this.wrapperEl.addClass(this.options.classes.wrapper);
-            if(this.options.feedbackOnHover){
-                this.wrapperEl.addClass(this.options.classes.feedbackOnHover);
-            }
-            if(this.options.backgroundInSlots){
-                this.wrapperEl.addClass(this.options.classes.backgroundInSlots);
-            }
+            this._applyClassModifiers();
             this.piecesContainerEl = this.options.appendPiecesTo != undefined ? $(this.options.appendPiecesTo) : this._createPiecesContainer();
             this.slotsContainerEl = this._createSlotsContainer();
             if(this.options.appendPiecesTo == undefined){

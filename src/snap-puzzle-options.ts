@@ -3,14 +3,25 @@
  *//** */
 /**
  * Options for the plugin
+ *
+ * All the options could be updated using the jquery ui widget method
+ *
+ * **Please note**, when some options are updated, the markup of the widget is re-created and the progress of the puzzle will be lost.
+ *
+ * @example For example
+ * ```typescript
+ * $("someSelector").snapPuzzle("option","rows",4);
+ * ```
  */
 export class SnapPuzzleOptions{
     /**
-     * Num of rows for the puzzle
+     * Num of rows for the puzzle.
+     * Update this option will reconstruct the markup and the progress will be lost
      */
     rows:number;
     /**
-     * Num of columns for the puzzle
+     * Num of columns for the puzzle.
+     * Update this option will reconstruct the markup and the progress will be lost
      */
     columns:number;
     /**
@@ -24,7 +35,8 @@ export class SnapPuzzleOptions{
      */
     height?:number;
     /**
-     * Namespace for events
+     * Namespace for events.
+     * Update this option will reconstruct the markup and the progress will be lost
      * @default jq-crossword
      */
     namespace?: string;
@@ -34,7 +46,9 @@ export class SnapPuzzleOptions{
      */
     disabled?:boolean;
     /**
-     * Css classes to use
+     * Css classes to use.
+     *
+     * Update this option will reconstruct the markup and the progress will be lost.
      */
     classes?: {
         /**
