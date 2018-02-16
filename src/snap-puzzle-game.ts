@@ -100,7 +100,6 @@ export class SnapPuzzleGame{
             piece.disable();
         }
     }
-
     /**
      * Enable the widget
      */
@@ -203,27 +202,22 @@ export class SnapPuzzleGame{
             //recreate the pieces
             recreatePieces = false,
             //complete recreate the puzzle
-            recreate = false,
-            optionsKeys = Object.keys(options);
-        for (let optionIndex = 0, optionsKeysLength = optionsKeys.length; optionIndex < optionsKeysLength; optionIndex++) {
-            let currentOption = optionsKeys[optionIndex];
-            switch (currentOption) {
+            recreate = false;
+        for(let option in options){
+            switch (option) {
                 case "namespace":
                 case "classes":
                     recreate = true;
-                    optionIndex = optionsKeysLength;
                     break;
                 case "rows":
                 case "columns":
                     recreatePieces = true;
-                    optionIndex = optionsKeysLength;
                     break;
                 case "onlyDropOnValid":
                 case "feedbackOnHover":
                 case "backgroundInSlots":
                 case "randomPieceStartPosition":
                     refresh = true;
-                    optionIndex = optionsKeysLength;
                     break;
             }
         }
@@ -371,7 +365,6 @@ export class SnapPuzzleGame{
             this.element.addClass(this.options.classes.root);
             this.wrapperEl = this._createWrapper();
             this.wrapperEl.addClass(this.options.classes.wrapper);
-            this._applyClassModifiers();
             this.piecesContainerEl = this.options.appendPiecesTo != undefined ? $(this.options.appendPiecesTo) : this._createPiecesContainer();
             this.slotsContainerEl = this._createSlotsContainer();
             if(this.options.appendPiecesTo == undefined){
@@ -433,6 +426,7 @@ export class SnapPuzzleGame{
             slotsEls = [],
             numPieces = columns*rows;
         this._resolveDimensions();
+        this._applyClassModifiers();
         for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
             let piecesRow = [];
             for(let columIndex = 0; columIndex < columns; columIndex++){

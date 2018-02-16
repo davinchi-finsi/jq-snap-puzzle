@@ -12,6 +12,18 @@
  * ```typescript
  * $("someSelector").snapPuzzle("option","rows",4);
  * ```
+ *
+ * **For multiple options**
+ * Because set options could reconstruct the component, if more that one option will be provided, pass an object instead of key-value
+ * @example Multiple options
+ * * ```typescript
+ * $("someSelector").snapPuzzle("option",{
+ *      columns:4,
+ *      rows:2,
+ *      backgroundInSlots:false
+ * });
+ * ```
+ *
  */
 export class SnapPuzzleOptions{
     /**
