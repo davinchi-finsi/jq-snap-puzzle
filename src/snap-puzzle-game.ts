@@ -83,10 +83,7 @@ export class SnapPuzzleGame{
      * Destroy the component
      */
     destroy(){
-        this.element.removeClass([this.options.classes.disabled,this.options.classes.root,this.options.classes.completed]);
-        this.element.off("."+this.options.namespace);
-        this.element.insertAfter(this.wrapperEl);
-        this.wrapperEl.remove();
+        this._destroy();
         //@ts-ignore
         this._super();
     }
@@ -131,8 +128,9 @@ export class SnapPuzzleGame{
 
     /**
      * Reset the puzzle
+     * @param [trigger=true]   Trigger the event
      */
-    reset(){
+    reset(trigger:boolean = true){
         this.completed = 0;
         this.wrapperEl.removeClass(this.options.classes.completed);
         this.element.removeClass(this.options.classes.completed);
@@ -140,7 +138,9 @@ export class SnapPuzzleGame{
         for(let piece of pieces){
             piece.reset();
         }
-        this.element.trigger(SnapPuzzleEvents.reset);
+        if(trigger) {
+            this.element.trigger(SnapPuzzleEvents.reset);
+        }
     }
     /**
      * JQuery ui function to get the default options
@@ -178,6 +178,72 @@ export class SnapPuzzleGame{
         return options;
     }
 
+    /**
+     * Internal destroy.
+     * Only destroys the markup and events, the instance of the widget still remains.
+     * Used to recreate the widget
+     * @protected
+     */
+    protected _destroy(){
+        $(window).off("."+this.options.namespace);
+        this.element.off("."+this.options.namespace);
+        this.element.removeClass([this.options.classes.disabled,this.options.classes.root,this.options.classes.completed]);
+        this.element.insertAfter(this.wrapperEl);
+        this.wrapperEl.remove();
+    }
+    /**
+     * Invoked by jquery widget
+     * @param options
+     * @protected
+     * @see [JQuery ui widget _setOptions](http://api.jqueryui.com/jQuery.widget/#method-_setOptions)
+     */
+    protected _setOptions( options ) {
+        //Refresh the widget
+        let refresh = false,
+            //recreate the pieces
+            recreatePieces = false,
+            //complete recreate the puzzle
+            recreate = false,
+            optionsKeys = Object.keys(options);
+        for (let optionIndex = 0, optionsKeysLength = optionsKeys.length; optionIndex < optionsKeysLength; optionIndex++) {
+            let currentOption = optionsKeys[optionIndex];
+            switch (currentOption) {
+                case "namespace":
+                case "classes":
+                    recreate = true;
+                    optionIndex = optionsKeysLength;
+                    break;
+                case "rows":
+                case "columns":
+                    recreatePieces = true;
+                    optionIndex = optionsKeysLength;
+                    break;
+                case "onlyDropOnValid":
+                case "feedbackOnHover":
+                case "backgroundInSlots":
+                case "randomPieceStartPosition":
+                    refresh = true;
+                    optionIndex = optionsKeysLength;
+                    break;
+            }
+        }
+        if(recreate){
+            this._destroy();
+            //@ts-ignore
+            this._super(options);
+            this._create();
+        }else if(recreatePieces){
+            //@ts-ignore
+            this._super(options);
+            this.pieces = [];
+            this.reset(false);
+            this._construct();
+        }else if(refresh){
+            //@ts-ignore
+            this._super(options);
+            this.refresh();
+        }
+    }
     /**
      * Creates the container for pieces
      * @returns {JQuery}
@@ -307,11 +373,11 @@ export class SnapPuzzleGame{
             this.completed = 0;
             this._resolveDimensions();
             if((this.imageWidth != Infinity && this.imageWidth != 0) && (this.imageHeight != Infinity && this.imageHeight != 0)){
-                this._onImageLoaded();
+                this._construct();
             }else{
-                this.element.one("load",this._onImageLoaded.bind(this));
+                this.element.one("load",this._construct.bind(this));
             }
-            this.element.on(SnapPuzzleEvents.pieceDrop,this._onPieceDrop.bind(this));
+            this.element.off(this.options.namespace).on(SnapPuzzleEvents.pieceDrop+"."+this.options.namespace,this._onPieceDrop.bind(this));
         }else{
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
         }
@@ -342,11 +408,12 @@ export class SnapPuzzleGame{
         this.pieceWidth = this.imageWidth/this.options.columns;
         this.pieceHeight = this.imageHeight/this.options.rows;
     }
+
     /**
-     * Invoked when the image has been loaded
-     * @protected
+     * Construct the puzzle
+     * @private
      */
-    protected _onImageLoaded(){
+    protected _construct(){
         //wait for image to load
         let rows = this.options.rows,
             columns = this.options.columns,
@@ -366,6 +433,10 @@ export class SnapPuzzleGame{
             }
             this.piecesMatrix[rowIndex]=piecesRow;
         }
+        if(this.slotsEls){
+            this.slotsEls.remove();
+            this.piecesEls.remove();
+        }
         this.slotsEls = $(slotsEls);
         this.piecesEls = $(piecesEls);
         //shuffle
@@ -381,7 +452,6 @@ export class SnapPuzzleGame{
         });
         this._throttleResize();
     }
-
     /**
      * Invoked when a piece is placed.
      * If the piece is correct, increment the completed counter.
@@ -416,6 +486,6 @@ export class SnapPuzzleGame{
         this.resizeTimeout = setTimeout(this._onResize.bind(this),200);
     }
     protected _throttleResize () {
-        $(window).on("resize", this._onNativeResize.bind(this));
+        $(window).off("."+this.options.namespace).on(`resize.${this.options.namespace}`, this._onNativeResize.bind(this));
     };
 }

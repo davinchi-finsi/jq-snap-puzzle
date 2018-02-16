@@ -127,6 +127,15 @@ export class SnapPuzzlePiece{
                 //@ts-ignore
                 backgroundSize: this.puzzle.imageWidth+'px '+this.puzzle.imageHeight+'px'
             });
+        }else{
+            this.slotEl.css({
+                //@ts-ignore
+                backgroundImage: '',
+                //@ts-ignore
+                backgroundPosition: '',
+                //@ts-ignore
+                backgroundSize: ''
+            });
         }
         if(this.pieceDroppedInto == undefined){
             //@ts-ignore
