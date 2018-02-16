@@ -95,6 +95,7 @@ Go to the [jquery ui download page](https://jqueryui.com/download) and checks:
 - Interaction:
     - Draggable
     - Droppable
+
 or use [this configuration](https://jqueryui.com/download/#!version=1.12.1&components=101000000100110000000000010000000000000000000000)
 
 ## Docs

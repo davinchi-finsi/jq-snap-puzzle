@@ -1,9 +1,9 @@
 /**
- * jq-snap-puzzle module.
- * For browser usage, all the members are available using the namespace `jqSnapPuzzle`
+ * jqSnapPuzzle module
+ *
  * @module jqSnapPuzzle
  * @preferred
- * @example
+ * @example For browser usage, all the members are available using the namespace `jqSnapPuzzle`
  * ```typescript
  * jqSnapPuzzle.SnapPuzzleGame
  * ``` *

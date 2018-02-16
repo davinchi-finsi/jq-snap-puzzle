@@ -508,7 +508,7 @@ export class SnapPuzzleGame{
     protected _complete(){
         this.wrapperEl.addClass(this.options.classes.completed);
         this.element.addClass(this.options.classes.completed);
-        this.element.trigger(SnapPuzzleEvents.completed,this);
+        this.element.trigger(SnapPuzzleEvents.complete,this);
     }
     protected _onNativeResize(){
         if(this.resizeTimeout){
