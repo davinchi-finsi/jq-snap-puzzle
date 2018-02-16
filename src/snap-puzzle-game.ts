@@ -76,9 +76,9 @@ export class SnapPuzzleGame{
      */
     protected resizeTimeout:any;
     /**
-     * Number of pieces completed
+     * Pending pieces
      */
-    protected completed:number;
+    protected pendingPieces:SnapPuzzlePiece[];
     /**
      * Destroy the component
      */
@@ -126,11 +126,32 @@ export class SnapPuzzleGame{
     }
 
     /**
+     * Solve the puzzle. Multiple options are available
+     * @param {boolean | number} resolveAllOrIndex    If is not provided, a random of the pending pieces will be resolved.
+     * If true is provided, all the pieces will be resolved. If a number is provided, the piece with that index will be resolved
+     */
+    solve(resolveAllOrIndex?:boolean|number){
+        if(resolveAllOrIndex === true){
+            for(let piece of this.pieces){
+                piece.solve();
+            }
+        }else if (typeof resolveAllOrIndex == "number"){
+            let itemToSolve = this.pieces[<number>resolveAllOrIndex];
+            if(itemToSolve){
+                itemToSolve.solve();
+            }
+        }else{
+            const random = Math.floor(Math.random()*this.pendingPieces.length),
+                itemToSolve = this.pendingPieces[random];
+            itemToSolve.solve();
+        }
+    }
+    /**
      * Reset the puzzle
      * @param [trigger=true]   Trigger the event
      */
     reset(trigger:boolean = true){
-        this.completed = 0;
+        this.pendingPieces = this.pieces.concat([]);
         this.wrapperEl.removeClass(this.options.classes.completed);
         this.element.removeClass(this.options.classes.completed);
         let pieces = this.pieces;
@@ -375,7 +396,6 @@ export class SnapPuzzleGame{
             this.slotsContainerEl.append(this.element);
             this.pieces = [];
             this.piecesMatrix = [];
-            this.completed = 0;
             this._resolveDimensions();
             if((this.imageWidth != Infinity && this.imageWidth != 0) && (this.imageHeight != Infinity && this.imageHeight != 0)){
                 this._construct();
@@ -445,6 +465,7 @@ export class SnapPuzzleGame{
         }
         this.slotsEls = $(slotsEls);
         this.piecesEls = $(piecesEls);
+        this.pendingPieces = this.pieces.concat([]);
         //shuffle
         this.pieces.sort(()=>Math.floor(Math.random() * numPieces));
         //append
@@ -468,9 +489,12 @@ export class SnapPuzzleGame{
      */
     protected _onPieceDrop(e,data:SnapPuzzlePieceDropEvent){
         if(data.isCorrect){
-            this.completed++;
+            const index = this.pendingPieces.indexOf(data.piece);
+            if(index != -1){
+                this.pendingPieces.splice(index,1);
+            }
         }
-        if(this.completed == this.pieces.length){
+        if(this.pendingPieces.length == 0){
             this._complete();
         }
     }

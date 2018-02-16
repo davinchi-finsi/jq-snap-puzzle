@@ -23,7 +23,7 @@ export class SnapPuzzlePiece{
     /**
      * Key to store the instance related to the dom elements using $.data
      */
-    public static DATA_KEY:string = "snapPuzzleSlot";
+    public static DATA_KEY:string = "snapPuzzlePiece";
     /**
      * Jquery element of the piece
      */
@@ -170,13 +170,48 @@ export class SnapPuzzlePiece{
             this.enable();
         }
     }
+
+    /**
+     * Solve the piece moving it to the correct slot
+     * @param [triggerEvent] If false, the event pieceDrop will not be triggered
+     */
+    solve(triggerEvent:boolean=true){
+        if(!this.completed){
+            //set the position of the piece
+            this.pieceEl.position({
+                my: "left top",
+                at: "left top",
+                of: this.slotEl,
+                collision: "none",
+                using: (position,data) => {
+                    //simulate dragging styles
+                    this.pieceEl.addClass("ui-draggable-dragging");
+                    //calculate the distance, the duration of the animation will be related to the distance
+                    let offsetElement = data.element.element.offset(),
+                        offsetTarget = data.target.element.offset(),
+                        distance = Math.sqrt(Math.pow(offsetTarget.left - offsetElement.left,2)+ Math.pow(offsetTarget.top - offsetElement.top,2));
+                    this.pieceEl.animate({
+                        top:position.top,
+                        left:position.left
+                    },Math.min(2000,distance*2),()=>{
+                        this.pieceEl.removeClass("ui-draggable-dragging");
+                        //call the drop
+                        this.onDrop({},{
+                            draggable:this.pieceEl
+                        },triggerEvent);
+                    });
+                }
+            });
+
+        }
+    }
     /**
      * Invoked when a piece is dropped in this slot
      * When a piece is dropped in the correct slot, the piece is automatically disabled
      * @param e
      * @param ui
      */
-    protected onDrop(e,ui){
+    protected onDrop(e,ui,triggerEvent=true){
         let item = ui.draggable,
             itemNativeEl = item.get(0);
         //if any piece has been dropped in the slot or the piece dropped is the current one) and (if the "onlyDropOnValid" is false or the piece dropped is the correct one
@@ -209,15 +244,27 @@ export class SnapPuzzlePiece{
                 this.slotEl.removeClass(this.puzzle.options.classes.slotCorrect).addClass(this.puzzle.options.classes.slotIncorrect);
             }
             //force the position of the piece to the slot because the piece could be dropped with a tolerance margin (not exactly in the bounds of the slot)
-            item.position({my: "left top", at: "left top", of: this.slotEl,collision:"none"});
-
-            //@ts-ignore
-            this.puzzle.element.trigger(SnapPuzzleEvents.pieceDrop,<SnapPuzzlePieceDropEvent>{
-                instance:this.puzzle,
-                piece:piece,
-                slot:this,
-                isCorrect:this.completed
+            item.position({
+                my: "left top",
+                at: "left top",
+                of: this.slotEl,
+                collision: "none",
+                using: (position) => {
+                    item.animate({
+                        top:position.top,
+                        left:position.left
+                    },200)
+                }
             });
+            if(triggerEvent) {
+                //@ts-ignore
+                this.puzzle.element.trigger(SnapPuzzleEvents.pieceDrop, <SnapPuzzlePieceDropEvent>{
+                    instance: this.puzzle,
+                    piece: piece,
+                    slot: this,
+                    isCorrect: this.completed
+                });
+            }
         }
     }
 
