@@ -1,5 +1,5 @@
 /**
- * @module snapPuzzle
+ * @module jqSnapPuzzle
  *//** */
 
 
@@ -7,8 +7,9 @@ import {SnapPuzzleGame} from "./snap-puzzle-game";
 import {SnapPuzzlePiece} from "./snap-puzzle-piece";
 
 /**
- * pieceDrop event
- * @example ```javascript
+ * pieceDrop event data
+ * @example
+ * ```typescript
  * $("someSelector").on("snapPuzzle:pieceDrop",(e,data:SnapPuzzlePieceDropEvent)=>{
  *      console.log(data);
  * });
@@ -40,8 +41,9 @@ export enum SnapPuzzleEvents{
      * Triggered when a piece is dropped in a slot
      * When a piece is dropped in the correct slot, the piece is automatically disabled
      * @see [[SnapPuzzlePieceDropEvent]]
-     * @example ```javascript
-     * $("someSelector").on(SnapPuzzleEvents.pieceDrop,(e,data)=>{
+     * @example
+     * ```typescript
+     * $("someSelector").on(SnapPuzzleEvents.pieceDrop,(e,data:SnapPuzzlePieceDropEvent)=>{
      *      console.log(data)
      *  });
      * ```
@@ -50,7 +52,8 @@ export enum SnapPuzzleEvents{
     /**
      * Triggered when the puzzle is reset.
      * The instance of the snap puzzle is passed as second argument
-     * @example ```javascript
+     * @example
+     * ```typescript
      * $("someSelector").on(SnapPuzzleEvents.reset,(e,snapPuzzleWidgetInstance)=>{
      *      console.log(snapPuzzleWidgetInstance)
      * });
@@ -58,13 +61,14 @@ export enum SnapPuzzleEvents{
      */
     reset = "snapPuzzle:reset",
     /**
-     * Triggered when all the pieces of the puzzle are completed
-     * The instance of the snap puzzle is passed as second argument
-     *  @example ```javascript
+     * Triggered when all the pieces of the puzzle are placed correctly.
+     * The instance of the snap puzzle is passed as second argument.
+     * @example
+     * ```typescript
      * $("someSelector").on(SnapPuzzleEvents.completed,(e,snapPuzzleWidgetInstance)=>{
      *      console.log(snapPuzzleWidgetInstance)
      * });
      * ```
      */
-    completed = "snapPuzzle:end"
+    complete = "snapPuzzle:complete"
 }

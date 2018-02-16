@@ -57,8 +57,8 @@
  * Represents a piece and the related slot.
  * **Note:** When a piece is dropped in the correct slot, the piece is automatically disabled
  */
-var SnapPuzzlePiece = /** @class */ (function () {
-    function SnapPuzzlePiece(params) {
+class SnapPuzzlePiece {
+    constructor(params) {
         /**
          * The piece is completed
          */
@@ -89,7 +89,7 @@ var SnapPuzzlePiece = /** @class */ (function () {
     /**
      * Refresh the images
      */
-    SnapPuzzlePiece.prototype.refresh = function () {
+    refresh() {
         this.pieceEl.css({
             //@ts-ignore
             width: this.puzzle.pieceWidth,
@@ -153,11 +153,11 @@ var SnapPuzzlePiece = /** @class */ (function () {
         else if (this.pieceDropped != undefined) {
             this.pieceDropped.pieceEl.position({ my: "left top", at: "left top", of: this.slotEl, collision: "none" });
         }
-    };
+    }
     /**
      * Reset the piece to the initial state. Remove the piece from the slot
      */
-    SnapPuzzlePiece.prototype.reset = function () {
+    reset() {
         this.completed = false;
         this.pieceDropped = null;
         this.pieceDroppedInto = null;
@@ -166,14 +166,12 @@ var SnapPuzzlePiece = /** @class */ (function () {
         if (!this.puzzle.options.disabled) {
             this.enable();
         }
-    };
+    }
     /**
      * Solve the piece moving it to the correct slot
      * @param [triggerEvent] If false, the event pieceDrop will not be triggered
      */
-    SnapPuzzlePiece.prototype.solve = function (triggerEvent) {
-        var _this = this;
-        if (triggerEvent === void 0) { triggerEvent = true; }
+    solve(triggerEvent = true) {
         if (!this.completed) {
             //set the position of the piece
             this.pieceEl.position({
@@ -181,40 +179,39 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 at: "left top",
                 of: this.slotEl,
                 collision: "none",
-                using: function (position, data) {
+                using: (position, data) => {
                     //simulate dragging styles
-                    _this.pieceEl.addClass("ui-draggable-dragging");
+                    this.pieceEl.addClass("ui-draggable-dragging");
                     //calculate the distance, the duration of the animation will be related to the distance
-                    var offsetElement = data.element.element.offset(), offsetTarget = data.target.element.offset(), distance = Math.sqrt(Math.pow(offsetTarget.left - offsetElement.left, 2) + Math.pow(offsetTarget.top - offsetElement.top, 2));
-                    _this.pieceEl.animate({
+                    let offsetElement = data.element.element.offset(), offsetTarget = data.target.element.offset(), distance = Math.sqrt(Math.pow(offsetTarget.left - offsetElement.left, 2) + Math.pow(offsetTarget.top - offsetElement.top, 2));
+                    this.pieceEl.animate({
                         top: position.top,
                         left: position.left
-                    }, Math.min(2000, distance * 2), function () {
-                        _this.pieceEl.removeClass("ui-draggable-dragging");
+                    }, Math.min(2000, distance * 2), () => {
+                        this.pieceEl.removeClass("ui-draggable-dragging");
                         //call the drop
-                        _this.onDrop({}, {
-                            draggable: _this.pieceEl
+                        this.onDrop({}, {
+                            draggable: this.pieceEl
                         }, triggerEvent);
                     });
                 }
             });
         }
-    };
+    }
     /**
      * Invoked when a piece is dropped in this slot
      * When a piece is dropped in the correct slot, the piece is automatically disabled
      * @param e
      * @param ui
      */
-    SnapPuzzlePiece.prototype.onDrop = function (e, ui, triggerEvent) {
-        if (triggerEvent === void 0) { triggerEvent = true; }
-        var item = ui.draggable, itemNativeEl = item.get(0);
+    onDrop(e, ui, triggerEvent = true) {
+        let item = ui.draggable, itemNativeEl = item.get(0);
         //if any piece has been dropped in the slot or the piece dropped is the current one) and (if the "onlyDropOnValid" is false or the piece dropped is the correct one
         //a piece could not be dropped in a slot that already has a piece
         //an incorrect piece could not be dropped in a slot if the option "onlyDropOnValid" is true
         //@ts-ignore
         if ((this.pieceDropped == undefined || this.pieceDropped.pieceNativeEl == itemNativeEl) && (this.puzzle.options.onlyDropOnValid == false || itemNativeEl == this.pieceNativeEl)) {
-            var piece = item.data(SnapPuzzlePiece.DATA_KEY);
+            const piece = item.data(SnapPuzzlePiece.DATA_KEY);
             //reset the pieceDropped of the previous slot
             if (piece.pieceDroppedInto) {
                 piece.pieceDroppedInto.pieceDropped = null;
@@ -245,7 +242,7 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 at: "left top",
                 of: this.slotEl,
                 collision: "none",
-                using: function (position) {
+                using: (position) => {
                     item.animate({
                         top: position.top,
                         left: position.left
@@ -262,17 +259,17 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 });
             }
         }
-    };
+    }
     /**
      * Resolve if the dropped piece must be revertd
      * @param target
      * @returns {boolean}
      */
-    SnapPuzzlePiece.prototype.resolveRevert = function (target) {
-        var allow = false;
+    resolveRevert(target) {
+        let allow = false;
         //if the target is an element. when the target is invalid is a false
         if (target) {
-            var data = target.data(SnapPuzzlePiece.DATA_KEY);
+            let data = target.data(SnapPuzzlePiece.DATA_KEY);
             //check if there is a piece dropped
             if (data == undefined || data.pieceDropped == undefined || data.pieceDropped.pieceNativeEl == this.pieceNativeEl) {
                 //@ts-ignore
@@ -284,7 +281,7 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 }
                 else if (target.is(this.puzzle.piecesContainerEl)) {
                     //if the target is the pieces container, check if the piece has been dropped inside
-                    var itemRect = this.pieceEl.get(0).getBoundingClientRect(), targetRect = target.get(0).getBoundingClientRect();
+                    let itemRect = this.pieceEl.get(0).getBoundingClientRect(), targetRect = target.get(0).getBoundingClientRect();
                     allow = (itemRect.left >= targetRect.left && itemRect.right <= targetRect.right) && (itemRect.top >= targetRect.top && itemRect.bottom <= targetRect.bottom);
                 }
             }
@@ -293,14 +290,14 @@ var SnapPuzzlePiece = /** @class */ (function () {
             this.onRevert(target);
         }
         return !allow;
-    };
+    }
     /**
      * Invoked when a piece is reverted.
      * Revert the state classes
      * @param {JQuery} slot
      */
-    SnapPuzzlePiece.prototype.onRevert = function (slot) {
-        var classToAdd, classToRemove;
+    onRevert(slot) {
+        let classToAdd, classToRemove;
         if (this.completed) {
             //@ts-ignore
             classToRemove = this.puzzle.options.classes.pieceIncorrect;
@@ -319,7 +316,7 @@ var SnapPuzzlePiece = /** @class */ (function () {
         }
         this.pieceEl.removeClass(classToRemove).addClass(classToAdd);
         if (slot) {
-            var slotPiece = slot.data(SnapPuzzlePiece.DATA_KEY), classToAddToSlot = void 0, classToRemoveFromSlot = void 0;
+            let slotPiece = slot.data(SnapPuzzlePiece.DATA_KEY), classToAddToSlot, classToRemoveFromSlot;
             if (slotPiece) {
                 if (slotPiece.completed) {
                     //@ts-ignore
@@ -340,24 +337,24 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 slot.removeClass(classToRemoveFromSlot).addClass(classToAddToSlot);
             }
         }
-    };
+    }
     /**
      * Invoked when a piece starts to been dragged. Resets the classes
      * @param e
      * @param ui
      */
-    SnapPuzzlePiece.prototype.onStart = function (e, ui) {
+    onStart(e, ui) {
         //@ts-ignore
         this.pieceEl.removeClass([this.puzzle.options.classes.pieceIncorrect, this.puzzle.options.classes.pieceCorrect]);
-    };
+    }
     /**
      * Invoked when the piece is over a slot. Add the correct/incorrect classes
      * This function is invoked only when the feedbackOnHover option is true
      * @param e
      * @param ui
      */
-    SnapPuzzlePiece.prototype.over = function (e, ui) {
-        var item = ui.draggable, itemNativeEl = item.get(0);
+    over(e, ui) {
+        const item = ui.draggable, itemNativeEl = item.get(0);
         //@ts-ignore
         if (this.pieceDropped == undefined || this.pieceDropped.pieceNativeEl == itemNativeEl) {
             //@ts-ignore
@@ -374,20 +371,20 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 this.slotEl.removeClass(this.puzzle.options.classes.slotCorrect).addClass(this.puzzle.options.classes.slotIncorrect);
             }
         }
-    };
+    }
     /**
      * Invoked when a piece exists from the bounds of a slot. Resets the classes
      * @param e
      * @param ui
      */
-    SnapPuzzlePiece.prototype.out = function (e, ui) {
+    out(e, ui) {
         //@ts-ignore
         this.slotEl.removeClass([this.puzzle.options.classes.slotCorrect, this.puzzle.options.classes.slotIncorrect]);
-    };
+    }
     /**
      * Init the jquery draggable
      */
-    SnapPuzzlePiece.prototype.initDraggable = function () {
+    initDraggable() {
         this.pieceEl.draggable({
             start: this.onStart.bind(this),
             //@ts-ignore
@@ -399,11 +396,11 @@ var SnapPuzzlePiece = /** @class */ (function () {
             snapMode:"inner",*/
             revert: this.resolveRevert.bind(this)
         });
-    };
+    }
     /**
      * Init the droppable
      */
-    SnapPuzzlePiece.prototype.initDroppable = function () {
+    initDroppable() {
         //@ts-ignore
         this.slotEl.on("." + this.puzzle.options.namespace, this.over.bind(this));
         this.slotEl.droppable({
@@ -415,136 +412,127 @@ var SnapPuzzlePiece = /** @class */ (function () {
             //@ts-ignore
             this.slotEl.on("dropover." + this.puzzle.options.namespace, this.over.bind(this));
         }
-    };
+    }
     /**
      * **For internal use only**
      * Enable the drag&drop if the piece has not been completed yet.
      * If the piece is complete the drag&drop will not be enabled
      * To enable the widget use [[SnapPuzzleGame.enable]] instead
      */
-    SnapPuzzlePiece.prototype.enable = function () {
+    enable() {
         if (!this.completed) {
             this.slotEl.droppable("enable");
             this.pieceEl.draggable("enable");
         }
-    };
+    }
     /**
      * **For internal use only**
      * Disable drag&drop.
      * To disable the widget use [[SnapPuzzleGame.disable]] instead
      */
-    SnapPuzzlePiece.prototype.disable = function () {
+    disable() {
         this.slotEl.droppable("disable");
         this.pieceEl.draggable("disable");
-    };
-    /**
-     * Key to store the instance related to the dom elements using $.data
-     */
-    SnapPuzzlePiece.DATA_KEY = "snapPuzzlePiece";
-    return SnapPuzzlePiece;
-}());
+    }
+}
+/**
+ * Key to store the instance related to the dom elements using $.data
+ */
+SnapPuzzlePiece.DATA_KEY = "snapPuzzlePiece";
 
 /**
  * Puzzle game
  */
-var SnapPuzzleGame = /** @class */ (function () {
-    function SnapPuzzleGame() {
-    }
+class SnapPuzzleGame {
     /**
      * Destroy the component
      */
-    SnapPuzzleGame.prototype.destroy = function () {
+    destroy() {
         this._destroy();
         //@ts-ignore
         this._super();
-    };
+    }
     /**
      * Disable the widget
      */
-    SnapPuzzleGame.prototype.disable = function () {
+    disable() {
         //@ts-ignore
         this._super();
         this.element.addClass(this.options.classes.disabled);
         this.wrapperEl.addClass(this.options.classes.disabled);
-        for (var _i = 0, _a = this.pieces; _i < _a.length; _i++) {
-            var piece = _a[_i];
+        for (let piece of this.pieces) {
             //@ts-ignore
             piece.disable();
         }
-    };
+    }
     /**
      * Enable the widget
      */
-    SnapPuzzleGame.prototype.enable = function () {
+    enable() {
         //@ts-ignore
         this._super();
         this.element.removeClass(this.options.classes.disabled);
         this.wrapperEl.removeClass(this.options.classes.disabled);
-        for (var _i = 0, _a = this.pieces; _i < _a.length; _i++) {
-            var piece = _a[_i];
+        for (let piece of this.pieces) {
             //@ts-ignore
             piece.enable();
         }
-    };
+    }
     /**
      * Refresh the dimensions and positions of the pieces and slots
      */
-    SnapPuzzleGame.prototype.refresh = function () {
+    refresh() {
         this._resolveDimensions();
-        var pieces = this.pieces;
-        for (var _i = 0, pieces_1 = pieces; _i < pieces_1.length; _i++) {
-            var piece = pieces_1[_i];
+        const pieces = this.pieces;
+        for (let piece of pieces) {
             piece.refresh();
         }
-    };
+    }
     /**
      * Solve the puzzle. Multiple options are available
      * @param {boolean | number} resolveAllOrIndex    If is not provided, a random of the pending pieces will be resolved.
      * If true is provided, all the pieces will be resolved. If a number is provided, the piece with that index will be resolved
      */
-    SnapPuzzleGame.prototype.solve = function (resolveAllOrIndex) {
+    solve(resolveAllOrIndex) {
         if (resolveAllOrIndex === true) {
-            for (var _i = 0, _a = this.pieces; _i < _a.length; _i++) {
-                var piece = _a[_i];
+            for (let piece of this.pieces) {
                 piece.solve();
             }
         }
         else if (typeof resolveAllOrIndex == "number") {
-            var itemToSolve = this.pieces[resolveAllOrIndex];
+            let itemToSolve = this.pieces[resolveAllOrIndex];
             if (itemToSolve) {
                 itemToSolve.solve();
             }
         }
         else {
-            var random = Math.floor(Math.random() * this.pendingPieces.length), itemToSolve = this.pendingPieces[random];
+            const random = Math.floor(Math.random() * this.pendingPieces.length), itemToSolve = this.pendingPieces[random];
             itemToSolve.solve();
         }
-    };
+    }
     /**
      * Reset the puzzle reverting the pieces and resetting the progress.
      * @emits [[SnapPuzzleEvents.reset]]
      * @param [trigger=true]   If true, the reset event will be triggered
      */
-    SnapPuzzleGame.prototype.reset = function (trigger) {
-        if (trigger === void 0) { trigger = true; }
+    reset(trigger = true) {
         this.pendingPieces = this.pieces.concat([]);
         this.wrapperEl.removeClass(this.options.classes.completed);
         this.element.removeClass(this.options.classes.completed);
-        var pieces = this.pieces;
-        for (var _i = 0, pieces_2 = pieces; _i < pieces_2.length; _i++) {
-            var piece = pieces_2[_i];
+        let pieces = this.pieces;
+        for (let piece of pieces) {
             piece.reset();
         }
         if (trigger) {
             this.element.trigger(exports.SnapPuzzleEvents.reset);
         }
-    };
+    }
     /**
      * JQuery ui function to get the default options
      * @protected
      */
-    SnapPuzzleGame.prototype._getCreateOptions = function () {
-        var options = {
+    _getCreateOptions() {
+        let options = {
             columns: 0,
             rows: 0,
             namespace: "jq-snap-puzzle",
@@ -573,34 +561,34 @@ var SnapPuzzleGame = /** @class */ (function () {
             randomPieceStartPosition: true
         };
         return options;
-    };
+    }
     /**
      * Internal destroy.
      * Only destroys the markup and events, the instance of the widget still remains.
      * Used to recreate the widget
      * @protected
      */
-    SnapPuzzleGame.prototype._destroy = function () {
+    _destroy() {
         $(window).off("." + this.options.namespace);
         this.element.off("." + this.options.namespace);
         this.element.removeClass([this.options.classes.disabled, this.options.classes.root, this.options.classes.completed]);
         this.element.insertAfter(this.wrapperEl);
         this.wrapperEl.remove();
-    };
+    }
     /**
      * Invoked by jquery widget
      * @param options
      * @protected
      * @see [JQuery ui widget _setOptions](http://api.jqueryui.com/jQuery.widget/#method-_setOptions)
      */
-    SnapPuzzleGame.prototype._setOptions = function (options) {
+    _setOptions(options) {
         //Refresh the widget
-        var refresh = false, 
+        let refresh = false, 
         //recreate the pieces
         recreatePieces = false, 
         //complete recreate the puzzle
         recreate = false;
-        for (var option in options) {
+        for (let option in options) {
             switch (option) {
                 case "namespace":
                 case "classes":
@@ -637,52 +625,52 @@ var SnapPuzzleGame = /** @class */ (function () {
             this._applyClassModifiers();
             this.refresh();
         }
-    };
+    }
     /**
      * Creates the container for pieces
      * @returns {JQuery}
      * @protected
      */
-    SnapPuzzleGame.prototype._createPiecesContainer = function () {
-        var result;
+    _createPiecesContainer() {
+        let result;
         if ((typeof this.options.createPiecesContainer).toLowerCase() == "function") {
             result = this.options.createPiecesContainer.apply(this, arguments);
         }
         else {
-            result = $("<div class=\"" + this.options.classes.piecesContainer + "\"></div>");
+            result = $(`<div class="${this.options.classes.piecesContainer}"></div>`);
         }
         return result;
-    };
+    }
     /**
      * Creates the container for slots
      * @returns {JQuery}
      * @protected
      */
-    SnapPuzzleGame.prototype._createSlotsContainer = function () {
-        var result;
+    _createSlotsContainer() {
+        let result;
         if ((typeof this.options.createSlotsContainer).toLowerCase() == "function") {
             result = this.options.createSlotsContainer.apply(this, arguments);
         }
         else {
-            result = $("<div class=\"" + this.options.classes.slotsContainer + "\"></div>");
+            result = $(`<div class="${this.options.classes.slotsContainer}"></div>`);
         }
         return result;
-    };
+    }
     /**
      * Creates the wrapper for the widget
      * @returns {JQuery}
      * @protected
      */
-    SnapPuzzleGame.prototype._createWrapper = function () {
-        var result;
+    _createWrapper() {
+        let result;
         if ((typeof this.options.createWrapper).toLowerCase() == "function") {
             result = this.options.createWrapper.apply(this, arguments);
         }
         else {
-            result = $("<div></div>");
+            result = $(`<div></div>`);
         }
         return result;
-    };
+    }
     /**
      * Creates each piece
      * @param x
@@ -690,16 +678,16 @@ var SnapPuzzleGame = /** @class */ (function () {
      * @returns {JQuery}
      * @protected
      */
-    SnapPuzzleGame.prototype._createPiece = function (x, y) {
-        var result;
+    _createPiece(x, y) {
+        let result;
         if ((typeof this.options.createPiece).toLowerCase() == "function") {
             result = this.options.createPiece.apply(this, arguments);
         }
         else {
-            result = $("<div class=\"" + this.options.classes.piece + "\"></div>");
+            result = $(`<div class="${this.options.classes.piece}"></div>`);
         }
         return result;
-    };
+    }
     /**
      * Creates each slot
      * @param x
@@ -707,16 +695,16 @@ var SnapPuzzleGame = /** @class */ (function () {
      * @returns {JQuery}
      * @protected
      */
-    SnapPuzzleGame.prototype._createSlot = function (x, y) {
-        var result;
+    _createSlot(x, y) {
+        let result;
         if ((typeof this.options.createSlot).toLowerCase() == "function") {
             result = this.options.createSlot.apply(this, arguments);
         }
         else {
-            result = $("<div class=\"" + this.options.classes.slot + "\"></div>");
+            result = $(`<div class="${this.options.classes.slot}"></div>`);
         }
         return result;
-    };
+    }
     /**
      * Initialize t he SnapPuzzlePiece for a piece and slot
      * @param x
@@ -724,8 +712,8 @@ var SnapPuzzleGame = /** @class */ (function () {
      * @returns {SnapPuzzlePiece}
      * @protected
      */
-    SnapPuzzleGame.prototype._constructPiece = function (x, y) {
-        var pieceEl = this._createPiece(x, y), slotEl = this._createSlot(x, y).attr("data-x", x).attr("data-y", y), piece = new SnapPuzzlePiece({
+    _constructPiece(x, y) {
+        let pieceEl = this._createPiece(x, y), slotEl = this._createSlot(x, y).attr("data-x", x).attr("data-y", y), piece = new SnapPuzzlePiece({
             puzzle: this,
             pieceEl: pieceEl,
             slotEl: slotEl,
@@ -733,12 +721,12 @@ var SnapPuzzleGame = /** @class */ (function () {
             y: y
         });
         return piece;
-    };
+    }
     /**
      * Apply the css classes for options
      * @protected
      */
-    SnapPuzzleGame.prototype._applyClassModifiers = function () {
+    _applyClassModifiers() {
         if (this.options.feedbackOnHover) {
             this.wrapperEl.addClass(this.options.classes.feedbackOnHover);
         }
@@ -751,14 +739,14 @@ var SnapPuzzleGame = /** @class */ (function () {
         else {
             this.wrapperEl.removeClass(this.options.classes.backgroundInSlots);
         }
-    };
+    }
     /**
      * Creation of the widget
      * @protected
      */
-    SnapPuzzleGame.prototype._create = function () {
+    _create() {
         if (this.element.is("img")) {
-            var src = this.element.attr("src");
+            let src = this.element.attr("src");
             this.src = src;
             this.element.addClass(this.options.classes.root);
             this.wrapperEl = this._createWrapper();
@@ -785,45 +773,45 @@ var SnapPuzzleGame = /** @class */ (function () {
         else {
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
         }
-    };
+    }
     /**
      * Invoked when the wrapper dimensions changes. Updates the pieces and slots
      */
-    SnapPuzzleGame.prototype._onResize = function () {
+    _onResize() {
         this.refresh();
-    };
+    }
     /**
      * Invoked when a piece is dropped inside of the pieces container. Resets the classes
      * @param e
      * @param ui
      */
-    SnapPuzzleGame.prototype._onDrop = function (e, ui) {
-        var snapPiece = ui.draggable.data(SnapPuzzlePiece.DATA_KEY);
+    _onDrop(e, ui) {
+        let snapPiece = ui.draggable.data(SnapPuzzlePiece.DATA_KEY);
         if (snapPiece && snapPiece.pieceDroppedInto) {
             snapPiece.pieceDroppedInto.pieceDropped = null;
             snapPiece.pieceDroppedInto = null;
         }
         ui.draggable.removeClass([this.options.classes.pieceIncorrect, this.options.classes.pieceCorrect]);
-    };
-    SnapPuzzleGame.prototype._resolveDimensions = function () {
+    }
+    _resolveDimensions() {
         this.imageWidth = (this.element.width() || this.options.width || 0);
         this.imageHeight = (this.element.height() || this.options.height || 0);
         this.pieceWidth = this.imageWidth / this.options.columns;
         this.pieceHeight = this.imageHeight / this.options.rows;
-    };
+    }
     /**
      * Construct the puzzle
      * @private
      */
-    SnapPuzzleGame.prototype._construct = function () {
+    _construct() {
         //wait for image to load
-        var rows = this.options.rows, columns = this.options.columns, piecesEls = [], slotsEls = [], numPieces = columns * rows;
+        let rows = this.options.rows, columns = this.options.columns, piecesEls = [], slotsEls = [], numPieces = columns * rows;
         this._resolveDimensions();
         this._applyClassModifiers();
-        for (var rowIndex = 0; rowIndex < rows; rowIndex++) {
-            var piecesRow = [];
-            for (var columIndex = 0; columIndex < columns; columIndex++) {
-                var piece = this._constructPiece(columIndex, rowIndex);
+        for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+            let piecesRow = [];
+            for (let columIndex = 0; columIndex < columns; columIndex++) {
+                let piece = this._constructPiece(columIndex, rowIndex);
                 slotsEls.push(piece.slotEl.get(0));
                 piecesEls.push(piece.pieceEl.get(0));
                 piecesRow.push(piece);
@@ -840,10 +828,9 @@ var SnapPuzzleGame = /** @class */ (function () {
         this.piecesEls = $(piecesEls);
         this.pendingPieces = this.pieces.concat([]);
         //shuffle
-        this.pieces.sort(function () { return Math.floor(Math.random() * numPieces); });
+        this.pieces.sort(() => Math.floor(Math.random() * numPieces));
         //append
-        for (var _i = 0, _a = this.pieces; _i < _a.length; _i++) {
-            var piece = _a[_i];
+        for (let piece of this.pieces) {
             piece.pieceEl.appendTo(this.piecesContainerEl);
         }
         this.piecesContainerEl.droppable({
@@ -852,7 +839,7 @@ var SnapPuzzleGame = /** @class */ (function () {
             drop: this._onDrop.bind(this)
         });
         this._throttleResize();
-    };
+    }
     /**
      * Invoked when a piece is placed.
      * If the piece is correct, increment the completed counter.
@@ -861,9 +848,9 @@ var SnapPuzzleGame = /** @class */ (function () {
      * @param {SnapPuzzlePieceDropEvent} data
      * @protected
      */
-    SnapPuzzleGame.prototype._onPieceDrop = function (e, data) {
+    _onPieceDrop(e, data) {
         if (data.isCorrect) {
-            var index = this.pendingPieces.indexOf(data.piece);
+            const index = this.pendingPieces.indexOf(data.piece);
             if (index != -1) {
                 this.pendingPieces.splice(index, 1);
             }
@@ -871,29 +858,28 @@ var SnapPuzzleGame = /** @class */ (function () {
         if (this.pendingPieces.length == 0) {
             this._complete();
         }
-    };
+    }
     /**
      * Mark the widget as completed
      * Triggers the [[SnapPuzzleEvents.end]] event
      * @private
      */
-    SnapPuzzleGame.prototype._complete = function () {
+    _complete() {
         this.wrapperEl.addClass(this.options.classes.completed);
         this.element.addClass(this.options.classes.completed);
         this.element.trigger(exports.SnapPuzzleEvents.completed, this);
-    };
-    SnapPuzzleGame.prototype._onNativeResize = function () {
+    }
+    _onNativeResize() {
         if (this.resizeTimeout) {
             clearTimeout(this.resizeTimeout);
         }
         this.resizeTimeout = setTimeout(this._onResize.bind(this), 200);
-    };
-    SnapPuzzleGame.prototype._throttleResize = function () {
-        $(window).off("." + this.options.namespace).on("resize." + this.options.namespace, this._onNativeResize.bind(this));
-    };
-    
-    return SnapPuzzleGame;
-}());
+    }
+    _throttleResize() {
+        $(window).off("." + this.options.namespace).on(`resize.${this.options.namespace}`, this._onNativeResize.bind(this));
+    }
+    ;
+}
 
 /**
  * @module jqSnapPuzzle
@@ -902,9 +888,9 @@ var SnapPuzzleGame = /** @class */ (function () {
 //the properties of a es6 class prototype aren't enumerable so it's necessary to get the propertyNames and get the descriptor of each one
 if (Object.hasOwnProperty("getOwnPropertyDescriptors")) {
     //@ts-ignore
-    var proto = {}, names = Object.getOwnPropertyNames(SnapPuzzleGame.prototype);
-    for (var nameIndex = 0, namesLength = names.length; nameIndex < namesLength; nameIndex++) {
-        var currentName = names[nameIndex];
+    let proto = {}, names = Object.getOwnPropertyNames(SnapPuzzleGame.prototype);
+    for (let nameIndex = 0, namesLength = names.length; nameIndex < namesLength; nameIndex++) {
+        let currentName = names[nameIndex];
         proto[currentName] = Object.getOwnPropertyDescriptor(SnapPuzzleGame.prototype, currentName).value;
     }
     $.widget("ui.snapPuzzle", proto);

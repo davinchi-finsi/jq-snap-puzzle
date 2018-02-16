@@ -1,3 +1,6 @@
+/**
+ * @module jqSnapPuzzle
+ */
 import {SnapPuzzleGame} from "./snap-puzzle-game";
 import {
     SnapPuzzleEvents,

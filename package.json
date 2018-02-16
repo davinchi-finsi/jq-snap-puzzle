@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "description": "A jquery plugin to create puzzles",
   "main": "dist/jquery.snap-puzzle.js",
-  "jsnext:main": "esm2015/jquery.snap-puzzle.js.js",
+  "jsnext:main": "esm2015/jquery.snap-puzzle.js",
   "ts:main": "src/index.ts",
   "types": "src/index.ts",
   "typings": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist && rollup -c",
-    "docs": "rimraf docs & typedoc --mode modules --ignoreCompilerErrors --readme none --exclude **/{index,jquery.crossword}.ts --out docs ./src"
+    "docs": "rimraf docs & typedoc --mode modules --ignoreCompilerErrors --readme none --exclude **/{index,jquery.snap-puzzle,jquery-ui-deps}.ts --out docs ./src"
   },
   "repository": {
     "type": "git",
@@ -23,13 +23,16 @@
     "@types/jquery": "^3.3.0",
     "@types/jqueryui": "^1.12.1",
     "@types/node": "^9.3.0",
+    "lodash.camelcase": "^4.3.0",
     "rollup": "^0.55.3",
     "rollup-plugin-license": "^0.5.0",
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-plugin-uglify": "^3.0.0",
+    "rollup-plugin-uglify-es": "0.0.1",
     "typedoc": "^0.10.0",
-    "typedoc-plugin-external-module-name": "^1.0.10",
+    "typedoc-plugin-external-module-name": "^1.1.1",
     "typescript": "^2.6.2",
+    "uglify-es": "^3.3.9",
     "uglify-js": "^3.3.8"
   },
   "dependencies": {

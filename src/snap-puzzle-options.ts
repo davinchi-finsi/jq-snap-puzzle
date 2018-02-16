@@ -25,7 +25,7 @@
  * ```
  *
  */
-export class SnapPuzzleOptions{
+export interface SnapPuzzleOptions{
     /**
      * Num of rows for the puzzle.
      * Update this option will reconstruct the markup and the progress will be lost
@@ -175,7 +175,8 @@ export class SnapPuzzleOptions{
     /**
      * Override the default creation of the pieces container
      * @returns {JQuery}
-     * @example ```$(".puzzle").snapPuzzle({
+     * @example ```typescript
+     * $(".puzzle").snapPuzzle({
      *      createPiecesContainer:()=>{
      *          return $(`<div class="my-custom-element"></div>`);
      *      }
@@ -187,7 +188,8 @@ export class SnapPuzzleOptions{
      * Override the default creation of the slots container
      * The slots container will be appended to the wrapper
      * @returns {JQuery}
-     * @example ```$(".puzzle").snapPuzzle({
+     * @example ```typescript
+     * $(".puzzle").snapPuzzle({
      *      createSlotsContainer:()=>{
      *          return $(`<div class="my-custom-element"></div>`);
      *      }
@@ -199,7 +201,8 @@ export class SnapPuzzleOptions{
      * Override the default creation of each piece.
      * The piece is the draggable item of the puzzle
      * @returns {JQuery}
-     * @example ```$(".puzzle").snapPuzzle({
+     * @example ```typescript
+     * $(".puzzle").snapPuzzle({
      *      createPiece:()=>{
      *          return $(`<div class="my-custom-element"></div>`);
      *      }
@@ -211,7 +214,8 @@ export class SnapPuzzleOptions{
      * Override the default creation of each slot.
      * The slot is where the piece of the puzzle could be dropped
      * @returns {JQuery}
-     * @example ```$(".puzzle").snapPuzzle({
+     * @example ```typescript
+     * $(".puzzle").snapPuzzle({
      *      createSlot:()=>{
      *          return $(`<div class="my-custom-element"></div>`);
      *      }
@@ -222,7 +226,8 @@ export class SnapPuzzleOptions{
     /**
      * Override the default creation of the wrapper
      * @returns {JQuery}
-     * @example ```$(".puzzle").snapPuzzle({
+     * @example ```typescript
+     * $(".puzzle").snapPuzzle({
      *      createWrapper:()=>{
      *          return $(`<div class="my-custom-element"></div>`);
      *      }

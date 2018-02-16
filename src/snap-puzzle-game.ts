@@ -115,7 +115,7 @@ export class SnapPuzzleGame{
     }
 
     /**
-     * Refresh the dimensions
+     * Refresh the dimensions and positions of the pieces and slots
      */
     refresh(){
         this._resolveDimensions();
@@ -147,8 +147,9 @@ export class SnapPuzzleGame{
         }
     }
     /**
-     * Reset the puzzle
-     * @param [trigger=true]   Trigger the event
+     * Reset the puzzle reverting the pieces and resetting the progress.
+     * @emits [[SnapPuzzleEvents.reset]]
+     * @param [trigger=true]   If true, the reset event will be triggered
      */
     reset(trigger:boolean = true){
         this.pendingPieces = this.pieces.concat([]);
