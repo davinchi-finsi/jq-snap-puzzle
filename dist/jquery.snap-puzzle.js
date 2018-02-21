@@ -880,7 +880,7 @@ var SnapPuzzleGame = /** @class */ (function () {
     SnapPuzzleGame.prototype._complete = function () {
         this.wrapperEl.addClass(this.options.classes.completed);
         this.element.addClass(this.options.classes.completed);
-        this.element.trigger(exports.SnapPuzzleEvents.completed, this);
+        this.element.trigger(exports.SnapPuzzleEvents.complete, this);
     };
     SnapPuzzleGame.prototype._onNativeResize = function () {
         if (this.resizeTimeout) {
@@ -914,11 +914,11 @@ else {
 }
 
 /**
- * jq-snap-puzzle module.
- * For browser usage, all the members are available using the namespace `jqSnapPuzzle`
+ * jqSnapPuzzle module
+ *
  * @module jqSnapPuzzle
  * @preferred
- * @example
+ * @example For browser usage, all the members are available using the namespace `jqSnapPuzzle`
  * ```typescript
  * jqSnapPuzzle.SnapPuzzleGame
  * ``` *

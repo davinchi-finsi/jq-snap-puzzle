@@ -1,0 +1,68 @@
+.c-snap-puzzle {
+  margin: auto;
+  position: relative;
+}
+
+.c-snap-puzzle__pieces-container {
+  min-width: 10em;
+  min-height: 10em;
+}
+
+.c-snap-puzzle__slots-container {
+  position: relative;
+}
+
+.c-snap-puzzle__slots-container img {
+  visibility: hidden;
+  max-width: 100%;
+}
+
+.c-snap-puzzle__piece {
+  position: absolute !important;
+  /*Override inline styles*/
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.c-snap-puzzle__piece:not(.ui-draggable-disabled) {
+  cursor: pointer;
+}
+
+.c-snap-puzzle__slot {
+  position: absolute;
+}
+
+.c-snap-puzzle__slot:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.c-snap-puzzle__slot.ui-droppable-hover:after {
+  opacity: 1;
+}
+
+.c-snap-puzzle__slot.c-snap-puzzle__slot--has-piece {
+  opacity: 1;
+}
+
+.c-snap-puzzle__slot .c-snap-puzzle__piece:not(.ui-draggable-dragging) {
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.c-snap-puzzle--slots-background .c-snap-puzzle__slot {
+  opacity: 0.3;
+}
+
+.c-snap-puzzle:not(.c-snap-puzzle--slots-background) .c-snap-puzzle__slot {
+  border: 1px solid #ccc;
+}

@@ -3,19 +3,13 @@
  * (c) 2018 Finsi, Inc.
  */
 
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.jqSnapPuzzle = {})));
-}(this, (function (exports) { 'use strict';
-
 /**
  * @module jqSnapPuzzle
  */ /** */
 /**
  * Available events
  */
-
+var SnapPuzzleEvents;
 (function (SnapPuzzleEvents) {
     /**
      * Triggered when a piece is dropped in a slot
@@ -51,7 +45,7 @@
      * ```
      */
     SnapPuzzleEvents["complete"] = "snapPuzzle:complete";
-})(exports.SnapPuzzleEvents || (exports.SnapPuzzleEvents = {}));
+})(SnapPuzzleEvents || (SnapPuzzleEvents = {}));
 
 /**
  * Represents a piece and the related slot.
@@ -251,7 +245,7 @@ class SnapPuzzlePiece {
             });
             if (triggerEvent) {
                 //@ts-ignore
-                this.puzzle.element.trigger(exports.SnapPuzzleEvents.pieceDrop, {
+                this.puzzle.element.trigger(SnapPuzzleEvents.pieceDrop, {
                     instance: this.puzzle,
                     piece: piece,
                     slot: this,
@@ -524,7 +518,7 @@ class SnapPuzzleGame {
             piece.reset();
         }
         if (trigger) {
-            this.element.trigger(exports.SnapPuzzleEvents.reset);
+            this.element.trigger(SnapPuzzleEvents.reset);
         }
     }
     /**
@@ -768,7 +762,7 @@ class SnapPuzzleGame {
             else {
                 this.element.one("load", this._construct.bind(this));
             }
-            this.element.off(this.options.namespace).on(exports.SnapPuzzleEvents.pieceDrop + "." + this.options.namespace, this._onPieceDrop.bind(this));
+            this.element.off(this.options.namespace).on(SnapPuzzleEvents.pieceDrop + "." + this.options.namespace, this._onPieceDrop.bind(this));
         }
         else {
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
@@ -867,7 +861,7 @@ class SnapPuzzleGame {
     _complete() {
         this.wrapperEl.addClass(this.options.classes.completed);
         this.element.addClass(this.options.classes.completed);
-        this.element.trigger(exports.SnapPuzzleEvents.completed, this);
+        this.element.trigger(SnapPuzzleEvents.complete, this);
     }
     _onNativeResize() {
         if (this.resizeTimeout) {
@@ -900,19 +894,14 @@ else {
 }
 
 /**
- * jq-snap-puzzle module.
- * For browser usage, all the members are available using the namespace `jqSnapPuzzle`
+ * jqSnapPuzzle module
+ *
  * @module jqSnapPuzzle
  * @preferred
- * @example
+ * @example For browser usage, all the members are available using the namespace `jqSnapPuzzle`
  * ```typescript
  * jqSnapPuzzle.SnapPuzzleGame
  * ``` *
  */ /** */
 
-exports.SnapPuzzlePiece = SnapPuzzlePiece;
-exports.SnapPuzzleGame = SnapPuzzleGame;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+export { SnapPuzzleEvents, SnapPuzzlePiece, SnapPuzzleGame };

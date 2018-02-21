@@ -2,7 +2,7 @@
  * @module jqSnapPuzzle
  */
 /**
- * Required dependencies from jquery ui
+ * Required jquery ui dependencies
  */
 import "jquery-ui/ui/version";
 import "jquery-ui/ui/plugin";
