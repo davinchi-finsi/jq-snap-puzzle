@@ -468,9 +468,10 @@ export class SnapPuzzleGame{
         this.piecesEls = $(piecesEls);
         this.pendingPieces = this.pieces.concat([]);
         //shuffle
-        this.pieces.sort(()=>Math.floor(Math.random() * numPieces));
+        const randomPieces = this.pieces.concat([]);
+        randomPieces.sort(()=>Math.floor(Math.random() * numPieces));
         //append
-        for(let piece of this.pieces){
+        for(let piece of randomPieces){
             piece.pieceEl.appendTo(this.piecesContainerEl);
         }
         this.piecesContainerEl.droppable({
