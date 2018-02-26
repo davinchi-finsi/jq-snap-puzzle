@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v0.0.1
+ * @license jq-snap-puzzle v1.0.0
  * (c) 2018 Finsi, Inc.
  */
 
