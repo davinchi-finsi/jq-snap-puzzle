@@ -22,6 +22,12 @@ Based on [jQuery-snapPuzzle](https://github.com/Pixabay/jQuery-snapPuzzle/) of @
 - Solve a random piece, a specific piece by index or all the pieces moving automatically to the correct slot[See solve](https://davinchi-finsi.github.io/jq-snap-puzzle/classes/jqsnappuzzle.snappuzzlegame.html#solve)
 - Responsive
 
+## Docs
+For more info, please check the [docs](https://davinchi-finsi.github.io/jq-snap-puzzle/)
+
+## Playground
+[Demo in jsfiddle](https://jsfiddle.net/Haztivity/71vecg2x/)
+
 ## Usage
 Install with `npm i jq-snap-puzzle`
 or download the [latest release](https://github.com/davinchi-finsi/jq-snap-puzzle/releases)
@@ -99,15 +105,6 @@ Go to the [jquery ui download page](https://jqueryui.com/download) and checks:
     - Droppable
 
 or use [this configuration](https://jqueryui.com/download/#!version=1.12.1&components=101000000100110000000000010000000000000000000000)
-
-## Docs
-For more info, please check the [docs](https://davinchi-finsi.github.io/jq-snap-puzzle/)
-
-## Playground
-[Demo in jsfiddle](https://jsfiddle.net/Haztivity/71vecg2x/)
-
-## Usage
-`npm i jq-snap-puzzle`
 
 ### Options
 Please go to [docs](https://davinchi-finsi.github.io/jq-snap-puzzle/interfaces/jqsnappuzzle.snappuzzlepieceoptions.html)
