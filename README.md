@@ -5,16 +5,16 @@ Based on [jQuery-snapPuzzle](https://github.com/Pixabay/jQuery-snapPuzzle/) of @
 
 ## Dependencies
 - jquery
-- jquery ui:
-    - jquery ui widget
-    - jquery ui draggable
-    - jquery ui droppable
+- jQuery UI:
+    - jQuery UI widget
+    - jQuery UI draggable
+    - jQuery UI droppable
 
 
 ## Features
 - Typescript sources
 - All the css classes are configurable. See [css classes](https://davinchi-finsi.github.io/jq-snap-puzzle/interfaces/jqsnappuzzle.snappuzzleoptions.html#classes)
-- Extensible with Widget. See [jquery ui widget docs](http://api.jqueryui.com/jQuery.widget/)
+- Extensible with Widget. See [jQuery UI widget docs](http://api.jqueryui.com/jQuery.widget/)
 - Define the number of rows and columns
 - Possibility to show the target image. [See backgroundInSlots](https://davinchi-finsi.github.io/jq-snap-puzzle/interfaces/jqsnappuzzle.snappuzzleoptions.html#backgroundinslots)
 - Possibility to show feedback (correct/incorrect) when the piece is over the slot[See feedbackOnHover](https://davinchi-finsi.github.io/jq-snap-puzzle/interfaces/jqsnappuzzle.snappuzzleoptions.html#feedbackonhover)
@@ -33,12 +33,12 @@ Install with `npm i jq-snap-puzzle`
 or download the [latest release](https://github.com/davinchi-finsi/jq-snap-puzzle/releases)
 
 ### Import as module
-Typescript:
+#### Typescript:
 ```typescript
 import * as $ from "jquery";
 //choose one of the follow options
 //for jquery-ui package
-import "jq-snap-puzzle/dist/jquery-ui-deps";
+import "jq-snap-puzzle/esm2015/jquery-ui-deps";
 //for jquery-ui-dist package
 import "jquery-ui-dist/jquery-ui";
 import {SnapPuzzleOptions} from "jq-snap-puzzle";
@@ -46,12 +46,12 @@ $("someSelector").snapPuzzle(<SnapPuzzleOptions>{
     //options
 });
 ```
-Vanilla ES2015
+#### Vanilla ES2015
 ```javascript
 import * as $ from "jquery";
 //choose one of the follow options
 //for jquery-ui package
-import "jq-snap-puzzle/dist/jquery-ui-deps";
+import "jq-snap-puzzle/esm2015/jquery-ui-deps";
 //for jquery-ui-dist package
 import "jquery-ui-dist/jquery-ui";
 import "jq-snap-puzzle";
@@ -59,7 +59,7 @@ $("someSelector").snapPuzzle({
     //options
 });
 ```
-**Please note** that depending of the bundler you are using other configurations may be necessary. For example, shimming JQuery and JQuery UI.
+**Please note** that depending of the bundler you are using other configurations may be necessary. For example, shimming JQuery and jQuery UI.
 ### Traditional way
 ```html
 <!DOCTYPE html>
@@ -83,8 +83,8 @@ $("someSelector").snapPuzzle({
     </body>
 </html>
 ```
-## JQuery ui
-JQuery ui could be included in the projects in many different ways and with different packages, instead
+## jQuery UI
+jQuery UI could be included in the projects in many different ways and with different packages, instead
 of force you to use one, we leave up to you how to include it:
 
 ### Modularized
@@ -92,14 +92,14 @@ Using `npm i jquery-ui` that install the package allowing to import the widgets 
 
 We provided a file with the imports of the required dependencies:
 ```typescript
-import "jq-snap-puzzle/dist/jquery-ui-deps";
+import "jq-snap-puzzle/esm2015/jquery-ui-deps";
 ```
 
 ### dist package
 In npm is available the package [jquery-ui-dist](https://www.npmjs.com/package/jquery-ui-dist). Recommended if you will use the most of the framework.
 
 ### Downloading a custom bundle
-Go to the [jquery ui download page](https://jqueryui.com/download) and checks:
+Go to the [jQuery UI download page](https://jqueryui.com/download) and checks:
 - Interaction:
     - Draggable
     - Droppable
