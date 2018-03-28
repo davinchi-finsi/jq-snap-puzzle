@@ -14,5 +14,5 @@ if(Object.hasOwnProperty("getOwnPropertyDescriptors")){
     }
     $.widget("ui.snapPuzzle", proto);
 }else {
-    $.widget("ui.snapPuzzle", SnapPuzzleGame);
+    $.widget("ui.snapPuzzle", SnapPuzzleGame.prototype);
 }
