@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v1.0.0
+ * @license jq-snap-puzzle v1.0.1
  * (c) 2018 Finsi, Inc.
  */
 
@@ -822,9 +822,10 @@ class SnapPuzzleGame {
         this.piecesEls = $(piecesEls);
         this.pendingPieces = this.pieces.concat([]);
         //shuffle
-        this.pieces.sort(() => Math.floor(Math.random() * numPieces));
+        const randomPieces = this.pieces.concat([]);
+        randomPieces.sort(() => Math.floor(Math.random() * numPieces));
         //append
-        for (let piece of this.pieces) {
+        for (let piece of randomPieces) {
             piece.pieceEl.appendTo(this.piecesContainerEl);
         }
         this.piecesContainerEl.droppable({
@@ -890,7 +891,7 @@ if (Object.hasOwnProperty("getOwnPropertyDescriptors")) {
     $.widget("ui.snapPuzzle", proto);
 }
 else {
-    $.widget("ui.snapPuzzle", SnapPuzzleGame);
+    $.widget("ui.snapPuzzle", SnapPuzzleGame.prototype);
 }
 
 /**
