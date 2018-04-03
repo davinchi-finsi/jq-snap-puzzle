@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v1.0.1
+ * @license jq-snap-puzzle v1.0.2
  * (c) 2018 Finsi, Inc.
  */
 
@@ -184,6 +184,8 @@ var SnapPuzzlePiece = /** @class */ (function () {
                 using: function (position, data) {
                     //simulate dragging styles
                     _this.pieceEl.addClass("ui-draggable-dragging");
+                    var zIndex = _this.pieceEl.css("zIndex");
+                    _this.pieceEl.css("zIndex", zIndex + 1);
                     //calculate the distance, the duration of the animation will be related to the distance
                     var offsetElement = data.element.element.offset(), offsetTarget = data.target.element.offset(), distance = Math.sqrt(Math.pow(offsetTarget.left - offsetElement.left, 2) + Math.pow(offsetTarget.top - offsetElement.top, 2));
                     _this.pieceEl.animate({
@@ -249,7 +251,9 @@ var SnapPuzzlePiece = /** @class */ (function () {
                     item.animate({
                         top: position.top,
                         left: position.left
-                    }, 200);
+                    }, 200, function () {
+                        item.css("zIndex", "");
+                    });
                 }
             });
             if (triggerEvent) {
