@@ -189,6 +189,8 @@ export class SnapPuzzlePiece{
                 using: (position,data) => {
                     //simulate dragging styles
                     this.pieceEl.addClass("ui-draggable-dragging");
+                    const zIndex = this.pieceEl.css("zIndex");
+                    this.pieceEl.css("zIndex",zIndex+1);
                     //calculate the distance, the duration of the animation will be related to the distance
                     let offsetElement = data.element.element.offset(),
                         offsetTarget = data.target.element.offset(),
@@ -256,7 +258,9 @@ export class SnapPuzzlePiece{
                     item.animate({
                         top:position.top,
                         left:position.left
-                    },200)
+                    },200,()=>{
+                        item.css("zIndex","");
+                    })
                 }
             });
             if(triggerEvent) {
