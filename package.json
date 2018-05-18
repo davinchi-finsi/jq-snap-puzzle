@@ -14,9 +14,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/davinchi/jq-snap-puzzle.git"
+    "url": "https://github.com/davinchi-finsi/jq-snap-puzzle.git"
   },
-  "homepage": "https://github.com/davinchi/jq-snap-puzzle",
+  "homepage": "https://github.com/davinchi-finsi/jq-snap-puzzle",
   "author": "Finsi",
   "license": "MIT",
   "devDependencies": {
