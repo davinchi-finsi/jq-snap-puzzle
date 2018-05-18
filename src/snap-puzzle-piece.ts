@@ -6,6 +6,7 @@ import {
     SnapPuzzleEvents,
     SnapPuzzlePieceDropEvent
 } from "./snap-puzzle-events";
+import {SnapPuzzleSolveOptions} from "./snap-puzzle-solve-options";
 
 /**
  * Options for SnapPuzzlePiece
@@ -176,9 +177,9 @@ export class SnapPuzzlePiece{
 
     /**
      * Solve the piece moving it to the correct slot
-     * @param [triggerEvent] If false, the event pieceDrop will not be triggered
+     * @param {SnapPuzzleSolveOptions} [options] Options
      */
-    solve(triggerEvent:boolean=true){
+    solve(options:SnapPuzzleSolveOptions={}){
         if(!this.completed){
             //set the position of the piece
             this.pieceEl.position({
@@ -198,12 +199,12 @@ export class SnapPuzzlePiece{
                     this.pieceEl.animate({
                         top:position.top,
                         left:position.left
-                    },Math.min(2000,distance*2),()=>{
+                    },options.animate != false ? Math.min(2000,distance*2) : 0,()=>{
                         this.pieceEl.removeClass("ui-draggable-dragging");
                         //call the drop
                         this.onDrop({},{
                             draggable:this.pieceEl
-                        },triggerEvent);
+                        }, options.emitChange != false);
                     });
                 }
             });

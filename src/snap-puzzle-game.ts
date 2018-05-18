@@ -7,6 +7,7 @@ import {
     SnapPuzzleEvents,
     SnapPuzzlePieceDropEvent
 } from "./snap-puzzle-events";
+import {SnapPuzzleSolveOptions} from "./snap-puzzle-solve-options";
 /**
  * Puzzle game
  */
@@ -127,10 +128,11 @@ export class SnapPuzzleGame{
 
     /**
      * Solve the puzzle. Multiple options are available
-     * @param {boolean | number} resolveAllOrIndex    If is not provided, a random of the pending pieces will be resolved.
+     * @param {boolean | number} [resolveAllOrIndex]    If is not provided, a random of the pending pieces will be resolved.
+     * @param {SnapPuzzleSolveOptions}  [options]   Options
      * If true is provided, all the pieces will be resolved. If a number is provided, the piece with that index will be resolved
      */
-    solve(resolveAllOrIndex?:boolean|number){
+    solve(resolveAllOrIndex?:boolean|number,options?:SnapPuzzleSolveOptions){
         if(resolveAllOrIndex === true){
             for(let piece of this.pieces){
                 piece.solve();
@@ -138,12 +140,12 @@ export class SnapPuzzleGame{
         }else if (typeof resolveAllOrIndex == "number"){
             let itemToSolve = this.pieces[<number>resolveAllOrIndex];
             if(itemToSolve){
-                itemToSolve.solve();
+                itemToSolve.solve(options);
             }
         }else{
             const random = Math.floor(Math.random()*this.pendingPieces.length),
                 itemToSolve = this.pendingPieces[random];
-            itemToSolve.solve();
+            itemToSolve.solve(options);
         }
     }
     /**
@@ -479,6 +481,11 @@ export class SnapPuzzleGame{
             accept: "."+this.options.classes.piece,
             drop:this._onDrop.bind(this)
         });
+        if(this.options.hints && this.options.hints > 0){
+            for(let i = 0; i< this.options.hints; i++) {
+                this.solve(null,{emitChange:false,animate:false})
+            }
+        }
         this._throttleResize();
     }
     /**

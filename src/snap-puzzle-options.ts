@@ -58,6 +58,11 @@ export interface SnapPuzzleOptions{
      */
     disabled?:boolean;
     /**
+     * Number of pieces to resolve from the beginning
+     * @default 0
+     */
+    hints?:number;
+    /**
      * Css classes to use.
      *
      * Update this option will reconstruct the markup and the progress will be lost.
