@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v1.0.2
+ * @license jq-snap-puzzle v1.1.0
  * (c) 2018 Finsi, Inc.
  */
 
@@ -163,9 +163,9 @@ class SnapPuzzlePiece {
     }
     /**
      * Solve the piece moving it to the correct slot
-     * @param [triggerEvent] If false, the event pieceDrop will not be triggered
+     * @param {SnapPuzzleSolveOptions} [options] Options
      */
-    solve(triggerEvent = true) {
+    solve(options = {}) {
         if (!this.completed) {
             //set the position of the piece
             this.pieceEl.position({
@@ -183,12 +183,12 @@ class SnapPuzzlePiece {
                     this.pieceEl.animate({
                         top: position.top,
                         left: position.left
-                    }, Math.min(2000, distance * 2), () => {
+                    }, options.animate != false ? Math.min(2000, distance * 2) : 0, () => {
                         this.pieceEl.removeClass("ui-draggable-dragging");
                         //call the drop
                         this.onDrop({}, {
                             draggable: this.pieceEl
-                        }, triggerEvent);
+                        }, options.emitChange != false);
                     });
                 }
             });
@@ -488,10 +488,11 @@ class SnapPuzzleGame {
     }
     /**
      * Solve the puzzle. Multiple options are available
-     * @param {boolean | number} resolveAllOrIndex    If is not provided, a random of the pending pieces will be resolved.
+     * @param {boolean | number} [resolveAllOrIndex]    If is not provided, a random of the pending pieces will be resolved.
+     * @param {SnapPuzzleSolveOptions}  [options]   Options
      * If true is provided, all the pieces will be resolved. If a number is provided, the piece with that index will be resolved
      */
-    solve(resolveAllOrIndex) {
+    solve(resolveAllOrIndex, options) {
         if (resolveAllOrIndex === true) {
             for (let piece of this.pieces) {
                 piece.solve();
@@ -500,12 +501,12 @@ class SnapPuzzleGame {
         else if (typeof resolveAllOrIndex == "number") {
             let itemToSolve = this.pieces[resolveAllOrIndex];
             if (itemToSolve) {
-                itemToSolve.solve();
+                itemToSolve.solve(options);
             }
         }
         else {
             const random = Math.floor(Math.random() * this.pendingPieces.length), itemToSolve = this.pendingPieces[random];
-            itemToSolve.solve();
+            itemToSolve.solve(options);
         }
     }
     /**
@@ -837,6 +838,11 @@ class SnapPuzzleGame {
             accept: "." + this.options.classes.piece,
             drop: this._onDrop.bind(this)
         });
+        if (this.options.hints && this.options.hints > 0) {
+            for (let i = 0; i < this.options.hints; i++) {
+                this.solve(null, { emitChange: false, animate: false });
+            }
+        }
         this._throttleResize();
     }
     /**

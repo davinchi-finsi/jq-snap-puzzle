@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SnapPuzzleEvents | jq-snap-puzzle</title>
+	<title>SnapPuzzleSolveOptions | jq-snap-puzzle</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/jqsnappuzzle.html">jqSnapPuzzle</a>
 				</li>
 				<li>
-					<a href="jqsnappuzzle.snappuzzleevents.html">SnapPuzzleEvents</a>
+					<a href="jqsnappuzzle.snappuzzlesolveoptions.html">SnapPuzzleSolveOptions</a>
 				</li>
 			</ul>
-			<h1>Enumeration SnapPuzzleEvents</h1>
+			<h1>Interface SnapPuzzleSolveOptions</h1>
 		</div>
 	</div>
 </header>
@@ -72,100 +72,62 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Available events</p>
+						<p>Options for <a href="../classes/jqsnappuzzle.snappuzzlegame.html#solve">SnapPuzzleGame.solve</a></p>
 					</div>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">SnapPuzzleSolveOptions</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumeration members</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="jqsnappuzzle.snappuzzleevents.html#complete" class="tsd-kind-icon">complete</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="jqsnappuzzle.snappuzzleevents.html#piecedrop" class="tsd-kind-icon">piece<wbr>Drop</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="jqsnappuzzle.snappuzzleevents.html#reset" class="tsd-kind-icon">reset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jqsnappuzzle.snappuzzlesolveoptions.html#animate" class="tsd-kind-icon">animate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="jqsnappuzzle.snappuzzlesolveoptions.html#emitchange" class="tsd-kind-icon">emit<wbr>Change</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="complete" class="tsd-anchor"></a>
-					<h3>complete</h3>
-					<div class="tsd-signature tsd-kind-icon">complete<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;snapPuzzle:complete&quot;</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="animate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> animate</h3>
+					<div class="tsd-signature tsd-kind-icon">animate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/davinchi-finsi/jq-snap-puzzle/blob/509dc0d/src/snap-puzzle-events.ts#L73">snap-puzzle-events.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/davinchi-finsi/jq-snap-puzzle/blob/509dc0d/src/snap-puzzle-solve-options.ts#L15">snap-puzzle-solve-options.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Triggered when all the pieces of the puzzle are placed correctly.
-							The instance of the snap puzzle is passed as second argument.</p>
+							<p>If false, the animation won&#39;t be performed</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>example</dt>
-							<dd><pre><code class="lang-typescript">$(<span class="hljs-string">"someSelector"</span>).on(SnapPuzzleEvents.completed,<span class="hljs-function">(<span class="hljs-params">e,snapPuzzleWidgetInstance</span>)=&gt;</span>{
-     <span class="hljs-built_in">console</span>.log(snapPuzzleWidgetInstance)
-});
-</code></pre>
-							</dd>
-						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="piecedrop" class="tsd-anchor"></a>
-					<h3>piece<wbr>Drop</h3>
-					<div class="tsd-signature tsd-kind-icon">piece<wbr>Drop<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;snapPuzzle:pieceDrop&quot;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="emitchange" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> emit<wbr>Change</h3>
+					<div class="tsd-signature tsd-kind-icon">emit<wbr>Change<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/davinchi-finsi/jq-snap-puzzle/blob/509dc0d/src/snap-puzzle-events.ts#L51">snap-puzzle-events.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/davinchi-finsi/jq-snap-puzzle/blob/509dc0d/src/snap-puzzle-solve-options.ts#L11">snap-puzzle-solve-options.ts:11</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Triggered when a piece is dropped in a slot
-							When a piece is dropped in the correct slot, the piece is automatically disabled</p>
+							<p>If false, the change event won&#39;t be emitted</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p><a href="../interfaces/jqsnappuzzle.snappuzzlepiecedropevent.html">SnapPuzzlePieceDropEvent</a></p>
-							</dd>
-							<dt>example</dt>
-							<dd><pre><code class="lang-typescript">$(<span class="hljs-string">"someSelector"</span>).on(SnapPuzzleEvents.pieceDrop,<span class="hljs-function">(<span class="hljs-params">e,data:SnapPuzzlePieceDropEvent</span>)=&gt;</span>{
-     <span class="hljs-built_in">console</span>.log(data)
- });
-</code></pre>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="reset" class="tsd-anchor"></a>
-					<h3>reset</h3>
-					<div class="tsd-signature tsd-kind-icon">reset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;snapPuzzle:reset&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/davinchi-finsi/jq-snap-puzzle/blob/509dc0d/src/snap-puzzle-events.ts#L62">snap-puzzle-events.ts:62</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Triggered when the puzzle is reset.
-							The instance of the snap puzzle is passed as second argument</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>example</dt>
-							<dd><pre><code class="lang-typescript">$(<span class="hljs-string">"someSelector"</span>).on(SnapPuzzleEvents.reset,<span class="hljs-function">(<span class="hljs-params">e,snapPuzzleWidgetInstance</span>)=&gt;</span>{
-     <span class="hljs-built_in">console</span>.log(snapPuzzleWidgetInstance)
-});
-</code></pre>
-							</dd>
-						</dl>
 					</div>
 				</section>
 			</section>
@@ -183,24 +145,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="jqsnappuzzle.snappuzzleevents.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Events</a>
-						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="jqsnappuzzle.snappuzzleevents.html#complete" class="tsd-kind-icon">complete</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="jqsnappuzzle.snappuzzleevents.html#piecedrop" class="tsd-kind-icon">piece<wbr>Drop</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="jqsnappuzzle.snappuzzleevents.html#reset" class="tsd-kind-icon">reset</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
+						<a href="../enums/jqsnappuzzle.snappuzzleevents.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Events</a>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/jqsnappuzzle.snappuzzlegame.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Game</a>
 					</li>
@@ -208,17 +155,29 @@
 						<a href="../classes/jqsnappuzzle.snappuzzlepiece.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Piece</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/jqsnappuzzle.snappuzzleoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Options</a>
+						<a href="jqsnappuzzle.snappuzzleoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/jqsnappuzzle.snappuzzlepiecedropevent.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Piece<wbr>Drop<wbr>Event</a>
+						<a href="jqsnappuzzle.snappuzzlepiecedropevent.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Piece<wbr>Drop<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/jqsnappuzzle.snappuzzlepieceoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Piece<wbr>Options</a>
+						<a href="jqsnappuzzle.snappuzzlepieceoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Piece<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/jqsnappuzzle.snappuzzlesolveoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Solve<wbr>Options</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="jqsnappuzzle.snappuzzlesolveoptions.html" class="tsd-kind-icon">Snap<wbr>Puzzle<wbr>Solve<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jqsnappuzzle.snappuzzlesolveoptions.html#animate" class="tsd-kind-icon">animate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="jqsnappuzzle.snappuzzlesolveoptions.html#emitchange" class="tsd-kind-icon">emit<wbr>Change</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
