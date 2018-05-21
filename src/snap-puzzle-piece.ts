@@ -204,7 +204,7 @@ export class SnapPuzzlePiece{
                         //call the drop
                         this.onDrop({},{
                             draggable:this.pieceEl
-                        }, options.emitChange != false);
+                        },options.emitChange != false);
                     });
                 }
             });
@@ -264,15 +264,13 @@ export class SnapPuzzlePiece{
                     })
                 }
             });
-            if(triggerEvent) {
-                //@ts-ignore
-                this.puzzle.element.trigger(SnapPuzzleEvents.pieceDrop, <SnapPuzzlePieceDropEvent>{
-                    instance: this.puzzle,
-                    piece: piece,
-                    slot: this,
-                    isCorrect: this.completed
-                });
-            }
+            //@ts-ignore
+            this.puzzle._onPieceDrop(<SnapPuzzlePieceDropEvent>{
+                instance: this.puzzle,
+                piece: piece,
+                slot: this,
+                isCorrect: this.completed
+            },triggerEvent);
         }
     }
 

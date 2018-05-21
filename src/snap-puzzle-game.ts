@@ -135,7 +135,7 @@ export class SnapPuzzleGame{
     solve(resolveAllOrIndex?:boolean|number,options?:SnapPuzzleSolveOptions){
         if(resolveAllOrIndex === true){
             for(let piece of this.pieces){
-                piece.solve();
+                piece.solve(options);
             }
         }else if (typeof resolveAllOrIndex == "number"){
             let itemToSolve = this.pieces[<number>resolveAllOrIndex];
@@ -405,7 +405,6 @@ export class SnapPuzzleGame{
             }else{
                 this.element.one("load",this._construct.bind(this));
             }
-            this.element.off(this.options.namespace).on(SnapPuzzleEvents.pieceDrop+"."+this.options.namespace,this._onPieceDrop.bind(this));
         }else{
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
         }
@@ -492,16 +491,18 @@ export class SnapPuzzleGame{
      * Invoked when a piece is placed.
      * If the piece is correct, increment the completed counter.
      * When all the pieces are placed correctly, triggers the [[SnapPuzzleEvents.end]] event
-     * @param e
      * @param {SnapPuzzlePieceDropEvent} data
      * @protected
      */
-    protected _onPieceDrop(e,data:SnapPuzzlePieceDropEvent){
+    protected _onPieceDrop(data:SnapPuzzlePieceDropEvent,triggerEvent:boolean=true){
         if(data.isCorrect){
             const index = this.pendingPieces.indexOf(data.piece);
             if(index != -1){
                 this.pendingPieces.splice(index,1);
             }
+        }
+        if(triggerEvent!=false){
+            this.element.trigger(SnapPuzzleEvents.pieceDrop,data);
         }
         if(this.pendingPieces.length == 0){
             this._complete();
