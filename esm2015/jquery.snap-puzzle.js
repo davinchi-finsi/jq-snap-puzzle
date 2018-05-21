@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v1.1.0
+ * @license jq-snap-puzzle v1.1.1
  * (c) 2018 Finsi, Inc.
  */
 
@@ -247,15 +247,13 @@ class SnapPuzzlePiece {
                     });
                 }
             });
-            if (triggerEvent) {
-                //@ts-ignore
-                this.puzzle.element.trigger(SnapPuzzleEvents.pieceDrop, {
-                    instance: this.puzzle,
-                    piece: piece,
-                    slot: this,
-                    isCorrect: this.completed
-                });
-            }
+            //@ts-ignore
+            this.puzzle._onPieceDrop({
+                instance: this.puzzle,
+                piece: piece,
+                slot: this,
+                isCorrect: this.completed
+            }, triggerEvent);
         }
     }
     /**
@@ -495,7 +493,7 @@ class SnapPuzzleGame {
     solve(resolveAllOrIndex, options) {
         if (resolveAllOrIndex === true) {
             for (let piece of this.pieces) {
-                piece.solve();
+                piece.solve(options);
             }
         }
         else if (typeof resolveAllOrIndex == "number") {
@@ -767,7 +765,6 @@ class SnapPuzzleGame {
             else {
                 this.element.one("load", this._construct.bind(this));
             }
-            this.element.off(this.options.namespace).on(SnapPuzzleEvents.pieceDrop + "." + this.options.namespace, this._onPieceDrop.bind(this));
         }
         else {
             throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
@@ -849,16 +846,18 @@ class SnapPuzzleGame {
      * Invoked when a piece is placed.
      * If the piece is correct, increment the completed counter.
      * When all the pieces are placed correctly, triggers the [[SnapPuzzleEvents.end]] event
-     * @param e
      * @param {SnapPuzzlePieceDropEvent} data
      * @protected
      */
-    _onPieceDrop(e, data) {
+    _onPieceDrop(data, triggerEvent = true) {
         if (data.isCorrect) {
             const index = this.pendingPieces.indexOf(data.piece);
             if (index != -1) {
                 this.pendingPieces.splice(index, 1);
             }
+        }
+        if (triggerEvent != false) {
+            this.element.trigger(SnapPuzzleEvents.pieceDrop, data);
         }
         if (this.pendingPieces.length == 0) {
             this._complete();

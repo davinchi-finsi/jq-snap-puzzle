@@ -1,6 +1,6 @@
 {
   "name": "jq-snap-puzzle",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A jquery plugin to create puzzles",
   "main": "dist/jquery.snap-puzzle.js",
   "jsnext:main": "esm2015/jquery.snap-puzzle.js",
@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build",
-    "docs": "rimraf docs & typedoc --mode modules --ignoreCompilerErrors --readme none --exclude **/{jquery.snap-puzzle,jquery-ui-deps}.ts --out docs ./src"
+    "docs": "rimraf docs & typedoc --mode modules --ignoreCompilerErrors --readme none --exclude **/{jquery.snap-puzzle,jquery-ui-deps}.ts --out docs ./src",
+    "changelog":"conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "repository": {
     "type": "git",

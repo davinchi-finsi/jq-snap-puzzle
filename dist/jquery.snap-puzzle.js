@@ -1,5 +1,5 @@
 /**
- * @license jq-snap-puzzle v1.1.0
+ * @license jq-snap-puzzle v1.1.1
  * (c) 2018 Finsi, Inc.
  */
 
@@ -252,15 +252,13 @@
                         });
                     }
                 });
-                if (triggerEvent) {
-                    //@ts-ignore
-                    this.puzzle.element.trigger(exports.SnapPuzzleEvents.pieceDrop, {
-                        instance: this.puzzle,
-                        piece: piece,
-                        slot: this,
-                        isCorrect: this.completed
-                    });
-                }
+                //@ts-ignore
+                this.puzzle._onPieceDrop({
+                    instance: this.puzzle,
+                    piece: piece,
+                    slot: this,
+                    isCorrect: this.completed
+                }, triggerEvent);
             }
         };
         /**
@@ -507,7 +505,7 @@
             if (resolveAllOrIndex === true) {
                 for (var _i = 0, _a = this.pieces; _i < _a.length; _i++) {
                     var piece = _a[_i];
-                    piece.solve();
+                    piece.solve(options);
                 }
             }
             else if (typeof resolveAllOrIndex == "number") {
@@ -781,7 +779,6 @@
                 else {
                     this.element.one("load", this._construct.bind(this));
                 }
-                this.element.off(this.options.namespace).on(exports.SnapPuzzleEvents.pieceDrop + "." + this.options.namespace, this._onPieceDrop.bind(this));
             }
             else {
                 throw "[SnapPuzzleGame] The widget must be initialized for <img> elements";
@@ -864,16 +861,19 @@
          * Invoked when a piece is placed.
          * If the piece is correct, increment the completed counter.
          * When all the pieces are placed correctly, triggers the [[SnapPuzzleEvents.end]] event
-         * @param e
          * @param {SnapPuzzlePieceDropEvent} data
          * @protected
          */
-        SnapPuzzleGame.prototype._onPieceDrop = function (e, data) {
+        SnapPuzzleGame.prototype._onPieceDrop = function (data, triggerEvent) {
+            if (triggerEvent === void 0) { triggerEvent = true; }
             if (data.isCorrect) {
                 var index = this.pendingPieces.indexOf(data.piece);
                 if (index != -1) {
                     this.pendingPieces.splice(index, 1);
                 }
+            }
+            if (triggerEvent != false) {
+                this.element.trigger(exports.SnapPuzzleEvents.pieceDrop, data);
             }
             if (this.pendingPieces.length == 0) {
                 this._complete();

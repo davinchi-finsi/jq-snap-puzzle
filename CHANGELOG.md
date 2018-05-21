@@ -1,3 +1,9 @@
+<a name="1.1.1"></a>
+## 1.1.1 (2018-05-21)
+### Bug Fixes
+* fix: When hints are used, the puzzle could never be completed ([3158067](http://github.com/haztivity/jq-snap-puzzle/commits/3158067))
+
+
 <a name="1.1.0"></a>
 # 1.1.0 (2018-05-18)
 ### Features
